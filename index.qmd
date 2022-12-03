@@ -275,10 +275,15 @@ stars <- stars + 0
 The total number of [stars]{.aoc-yellow} earned is
 [`r stars`]{.aoc-green}.
 
+# Source code
+
+The source code can be found at [github.com/JoDudding/advent-of-code](https://github.com/JoDudding/advent-of-code).
+
 ```{bash}
 #| label: quarto-preview-instruction
 #| echo: false
 
-# quarto preview advent-of-code.qmd
+# quarto preview index.qmd
+# quarto render index.qmd
 
 ```
