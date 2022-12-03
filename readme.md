@@ -9,7 +9,7 @@ Analyst: | Jo Dudding
 
 Personal project to participate in the advent of code using R and Quarto. 
 
-> Link to github.io version needs to go here
+[Click here to see the analysis jodudding.github.io/advent-of-code](https://jodudding.github.io/advent-of-code/)
 
 ## Status
 
