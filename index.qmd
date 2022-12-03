@@ -1,0 +1,284 @@
+---
+title : Advent of Code 2022
+subtitle: "[adventofcode.com](https://adventofcode.com/){.aoc-yellow}"
+#author: Jo Dudding
+#date: today
+format: 
+  html:
+    #embed-resources: true
+    #standalone: true
+    fig-width: 8
+    fig-height: 4
+    theme: ['advent-of-code.scss']
+    highlight-style: nord
+    toc: true
+    toc_float: 
+      collapsed: true
+    code-fold: true  
+execute: 
+  echo: true
+  warning: false
+  message: false
+knitr: 
+  opts_knit: 
+    root-dir: "`r here::here()`"
+---
+
+# Introduction
+
+This analysis is my attempt at [adventofcode.com](https://adventofcode.com/) using R and Quarto.
+
+Here's an overview from [adventofcode.com](https://adventofcode.com/).
+
+> Santa's reindeer typically eat regular reindeer food, but they need a lot of magical energy to deliver presents on Christmas. For that, their favorite snack is a special type of [star]{.aoc-yellow} fruit that only grows deep in the jungle. The Elves have brought you on their annual expedition to the grove where the fruit grows.
+> 
+> To supply enough magical energy, the expedition needs to retrieve a minimum of [fifty stars]{.aoc-yellow} by December 25th. Although the Elves assure you that the grove has plenty of fruit, you decide to grab any fruit you see along the way, just in case.
+> 
+> Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants [one star]{.aoc-yellow}. Good luck!
+
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(scales)
+library(here)
+
+stars <- 0
+
+```
+
+# Day 1
+
+[Instructions](https://adventofcode.com/2022/day/1)
+
+```{r}
+#| label: read-day1-part1
+df1 <- tibble(cals = readLines('inputs/day1-part1.csv')) |>
+  mutate(
+    cals = as.numeric(cals),
+    row = row_number(),
+    elf = case_when(
+      row == 1 ~ row,
+      is.na(cals) ~ row
+    )
+  ) |>
+  fill(elf) |>
+  filter(!is.na(cals)) |>
+  group_by(elf) |>
+  summarise(cals = sum(cals)) |>
+  ungroup() |>
+  arrange(-cals)
+
+stars <- stars + 1
+```
+
+The maximum calories carried by an elf is
+[`r comma(max(df1$cals))`]{.aoc-green}. [*]{.aoc-yellow}
+
+```{r}
+#| label: read-day1-part2
+
+top_3_cals <- df1 |>
+  head(3) |>
+  summarise(cals = sum(cals)) |>
+  pull(cals)
+
+stars <- stars + 1
+```
+
+The calories carried by the top three elves is
+[`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
+
+# Day 2
+
+[Instructions](https://adventofcode.com/2022/day/2)
+
+```{r}
+#| label: read-day2-part1
+df2 <- tibble(strat = readLines('inputs/day2-part1.csv')) |>
+  separate(strat, into = c('them', 'us')) |>
+  mutate(
+    shape = case_when(
+      us == 'X' ~ 1,
+      us == 'Y' ~ 2,
+      us == 'Z' ~ 3
+    ),
+    outcome = case_when(
+      them == 'A' & us == 'X' ~ 3,
+      them == 'A' & us == 'Y' ~ 6,
+      them == 'A' & us == 'Z' ~ 0,
+      them == 'B' & us == 'X' ~ 0,
+      them == 'B' & us == 'Y' ~ 3,
+      them == 'B' & us == 'Z' ~ 6,
+      them == 'C' & us == 'X' ~ 6,
+      them == 'C' & us == 'Y' ~ 0,
+      them == 'C' & us == 'Z' ~ 3
+    ),
+    score = shape + outcome
+  ) 
+
+stars <- stars + 1
+
+```
+
+The total points for this strategy are
+`r comma(sum(df2$score))`.  [*]{.aoc-yellow}
+
+```{r}
+#| label: read-day2-part2
+
+df2_p2 <- df2 |>
+  mutate(
+    outcome = us,
+    us = case_when(
+      them == 'A' & outcome == 'X' ~ 'Z',
+      them == 'A' & outcome == 'Y' ~ 'X',
+      them == 'A' & outcome == 'Z' ~ 'Y',
+      them == 'B' & outcome == 'X' ~ 'X',
+      them == 'B' & outcome == 'Y' ~ 'Y',
+      them == 'B' & outcome == 'Z' ~ 'Z',
+      them == 'C' & outcome == 'X' ~ 'Y',
+      them == 'C' & outcome == 'Y' ~ 'Z',
+      them == 'C' & outcome == 'Z' ~ 'X'
+    ),
+    shape_points = case_when(
+      us == 'X' ~ 1,
+      us == 'Y' ~ 2,
+      us == 'Z' ~ 3
+    ),
+    outcome_points = case_when(
+      outcome =='X' ~ 0,
+      outcome =='Y' ~ 3,
+      outcome =='Z' ~ 6
+    ),
+    score = shape_points + outcome_points
+  ) 
+
+stars <- stars + 1
+```
+
+The total points for the updated strategy are
+`r comma(sum(df2_p2$score))`.  [*]{.aoc-yellow}
+
+
+# Day 3
+
+[Instructions](https://adventofcode.com/2022/day/3)
+
+```{r}
+#| label: read-day3-part1
+
+scoring3 <- tibble(
+  contents_item = c(letters, LETTERS),
+  priority = 1:52
+)
+
+df3 <- tibble(contents = readLines('inputs/day3-part1.csv')) |>
+  mutate(
+    rucksack = row_number(),
+    len = str_length(contents),
+    contents_item = str_split(contents, "")
+  ) |>
+  unnest(contents_item) |>
+  group_by(rucksack) |>
+  mutate(
+    compartment = if_else(row_number() <= len / 2, 'a', 'b')
+  ) 
+  
+df3_1 <- df3|>
+  distinct(rucksack, contents_item, compartment) |>
+  group_by(rucksack, contents_item) |>
+  filter(n() > 1) |>
+  ungroup() |>
+  distinct(rucksack, contents_item) |>
+  left_join(scoring3, by = 'contents_item')
+
+stars <- stars + 1
+
+```
+
+The total priority for the rucksacks is
+`r comma(sum(df3_1$priority))`.  [*]{.aoc-yellow}
+
+```{r}
+#| label: read-day3-part2
+
+df3_2 <- df3 |>
+  mutate(
+    trio = (rucksack - 1) %/% 3
+  ) |>
+  distinct(rucksack, contents_item, trio) |>
+  group_by(trio, contents_item) |>
+  filter(n()  == 3) |>
+  ungroup() |>
+  distinct(contents_item, trio) |>
+  left_join(scoring3, by = 'contents_item') 
+
+stars <- stars + 1
+```
+
+The total priority for the badges is
+`r comma(sum(df3_2$priority))`.  [*]{.aoc-yellow}
+
+<!-- 
+# Day 4
+
+[Instructions](https://adventofcode.com/2022/day/4)
+
+```{r}
+#| label: read-day4-part1
+
+
+
+stars <- stars + 0
+
+```
+
+
+```{r}
+#| label: read-day4-part2
+
+
+
+stars <- stars + 0
+```
+
+
+# Day 5
+
+[Instructions](https://adventofcode.com/2022/day/5)
+
+```{r}
+#| label: read-day5-part1
+
+
+
+stars <- stars + 0
+
+```
+
+
+```{r}
+#| label: read-day5-part2
+
+
+
+stars <- stars + 0
+```
+
+
+-->
+
+# Total stars
+
+The total number of [stars]{.aoc-yellow} earned is
+[`r stars`]{.aoc-green}.
+
+```{bash}
+#| label: quarto-preview-instruction
+#| echo: false
+
+# quarto preview advent-of-code.qmd
+
+```
