@@ -109,9 +109,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#day-1" id="toc-day-1" class="nav-link" data-scroll-target="#day-1">Day 1</a></li>
-  <li><a href="#day-2" id="toc-day-2" class="nav-link" data-scroll-target="#day-2">Day 2</a></li>
-  <li><a href="#day-3" id="toc-day-3" class="nav-link" data-scroll-target="#day-3">Day 3</a></li>
+  <li><a href="#day-1-calorie-counting" id="toc-day-1-calorie-counting" class="nav-link" data-scroll-target="#day-1-calorie-counting">Day 1: Calorie Counting</a></li>
+  <li><a href="#day-2-rock-paper-scissors" id="toc-day-2-rock-paper-scissors" class="nav-link" data-scroll-target="#day-2-rock-paper-scissors">Day 2: Rock Paper Scissors</a></li>
+  <li><a href="#day-3-rucksack-reorganization" id="toc-day-3-rucksack-reorganization" class="nav-link" data-scroll-target="#day-3-rucksack-reorganization">Day 3: Rucksack Reorganization</a></li>
+  <li><a href="#day-4-camp-cleanup" id="toc-day-4-camp-cleanup" class="nav-link" data-scroll-target="#day-4-camp-cleanup">Day 4: Camp Cleanup</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
   </ul>
@@ -156,8 +157,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 </section>
-<section id="day-1" class="level1">
-<h1>Day 1</h1>
+<section id="day-1-calorie-counting" class="level1">
+<h1>Day 1: Calorie Counting</h1>
 <p><a href="https://adventofcode.com/2022/day/1">Instructions</a></p>
 <div class="cell">
 <details>
@@ -195,8 +196,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The calories carried by the top three elves is <span class="aoc-green">211,189</span>. <span class="aoc-yellow">*</span></p>
 </section>
-<section id="day-2" class="level1">
-<h1>Day 2</h1>
+<section id="day-2-rock-paper-scissors" class="level1">
+<h1>Day 2: Rock Paper Scissors</h1>
 <p><a href="https://adventofcode.com/2022/day/2">Instructions</a></p>
 <div class="cell">
 <details>
@@ -262,8 +263,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>The total points for the updated strategy are 12,526. <span class="aoc-yellow">*</span></p>
 </section>
-<section id="day-3" class="level1">
-<h1>Day 3</h1>
+<section id="day-3-rucksack-reorganization" class="level1">
+<h1>Day 3: Rucksack Reorganization</h1>
 <p><a href="https://adventofcode.com/2022/day/3">Instructions</a></p>
 <div class="cell">
 <details>
@@ -315,31 +316,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 <p>The total priority for the badges is 2,752. <span class="aoc-yellow">*</span></p>
+</section>
+<section id="day-4-camp-cleanup" class="level1">
+<h1>Day 4: Camp Cleanup</h1>
+<p><a href="https://adventofcode.com/2022/day/4">Instructions</a></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">sections =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day4-part1.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(sections, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'elf1_min'</span>, <span class="st">'elf1_max'</span>, <span class="st">'elf2_min'</span>, <span class="st">'elf2_max'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pair =</span> <span class="fu">row_number</span>())</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>df4_1 <span class="ot">&lt;-</span> df4 <span class="sc">|&gt;</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    (elf1_min <span class="sc">&lt;=</span> elf2_min <span class="sc">&amp;</span> elf1_max <span class="sc">&gt;=</span> elf2_max) <span class="sc">|</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    (elf2_min <span class="sc">&lt;=</span> elf1_min <span class="sc">&amp;</span> elf2_max <span class="sc">&gt;=</span> elf1_max) </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 448 × 5
+   elf1_min elf1_max elf2_min elf2_max  pair
+      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+ 1       26       27       26       91     4
+ 2       29       68       29       70     7
+ 3       29       30       29       44    15
+ 4        8       59        8       98    21
+ 5       74       86        7       87    28
+ 6       49       65       49       64    30
+ 7       48       61       11       88    32
+ 8       46       51       46       50    33
+ 9        4       93        5       92    37
+10       31       90       19       91    40
+# … with 438 more rows</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The assignment pairs where one fully contains the other is 448. <span class="aoc-yellow">*</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df4_2 <span class="ot">&lt;-</span> df4 <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (elf1_max <span class="sc">&gt;=</span> elf2_min <span class="sc">&amp;</span> elf1_max <span class="sc">&lt;=</span> elf2_max) <span class="sc">|</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    (elf2_max <span class="sc">&gt;=</span> elf1_min <span class="sc">&amp;</span> elf2_max <span class="sc">&lt;=</span> elf1_max)  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 794 × 5
+   elf1_min elf1_max elf2_min elf2_max  pair
+      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;
+ 1        8       18       10       19     1
+ 2       12       69        8       15     2
+ 3       26       27       26       91     4
+ 4       17       43       18       44     6
+ 5       29       68       29       70     7
+ 6       15       90       28       91     8
+ 7        8       39       10       40     9
+ 8       47       64       27       63    10
+ 9       20       22       21       98    13
+10       52       53       53       98    14
+# … with 784 more rows</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The assignment pairs where they overlap is 794. <span class="aoc-yellow">*</span></p>
 <!-- 
-# Day 4
-
-[Instructions](https://adventofcode.com/2022/day/4)
-
-
-::: {.cell}
-
-```{.r .cell-code}
-stars <- stars + 0
-```
-:::
-
-::: {.cell}
-
-```{.r .cell-code}
-stars <- stars + 0
-```
-:::
-
-
-
 # Day 5
 
 [Instructions](https://adventofcode.com/2022/day/5)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+
+
+# Day 6
+
+[Instructions](https://adventofcode.com/2022/day/6)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+
+
+# Day 7
+
+[Instructions](https://adventofcode.com/2022/day/7)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+
+
+# Day 8
+
+[Instructions](https://adventofcode.com/2022/day/8)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+
+
+# Day 9
+
+[Instructions](https://adventofcode.com/2022/day/9)
+
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+::: {.cell}
+
+```{.r .cell-code}
+stars <- stars + 0
+```
+:::
+
+
+
+# Day 10
+
+[Instructions](https://adventofcode.com/2022/day/10)
 
 
 ::: {.cell}
@@ -362,7 +519,7 @@ stars <- stars + 0
 </section>
 <section id="total-stars" class="level1">
 <h1>Total stars</h1>
-<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">6</span>.</p>
+<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">8</span>.</p>
 </section>
 <section id="source-code" class="level1">
 <h1>Source code</h1>
