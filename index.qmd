@@ -123,7 +123,7 @@ stars <- stars + 1
 ```
 
 The total points for this strategy are
-`r comma(sum(df2$score))`.  [*]{.aoc-yellow}
+[`r comma(sum(df2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day2-part2
@@ -159,7 +159,7 @@ stars <- stars + 1
 ```
 
 The total points for the updated strategy are
-`r comma(sum(df2_p2$score))`.  [*]{.aoc-yellow}
+[`r comma(sum(df2_p2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 # Day 3: Rucksack Reorganization
@@ -199,7 +199,7 @@ stars <- stars + 1
 ```
 
 The total priority for the rucksacks is
-`r comma(sum(df3_1$priority))`.  [*]{.aoc-yellow}
+[`r comma(sum(df3_1$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day3-part2
@@ -219,7 +219,7 @@ stars <- stars + 1
 ```
 
 The total priority for the badges is
-`r comma(sum(df3_2$priority))`.  [*]{.aoc-yellow}
+[`r comma(sum(df3_2$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 # Day 4: Camp Cleanup
@@ -237,15 +237,14 @@ df4_1 <- df4 |>
   filter(
     (elf1_min <= elf2_min & elf1_max >= elf2_max) |
     (elf2_min <= elf1_min & elf2_max >= elf1_max) 
-  ) |> 
-  print()
+  ) 
 
 stars <- stars + 1
 
 ```
 
 The assignment pairs where one fully contains the other is
-`r comma(nrow(df4_1))`.  [*]{.aoc-yellow}
+[`r comma(nrow(df4_1))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 ```{r}
@@ -256,15 +255,14 @@ df4_2 <- df4 |>
   filter(
     (elf1_max >= elf2_min & elf1_max <= elf2_max) |
     (elf2_max >= elf1_min & elf2_max <= elf1_max)  
-  ) |> 
-  print()
+  )
 
 stars <- stars + 1
 ```
 
 
 The assignment pairs where they overlap is
-`r comma(nrow(df4_2))`.  [*]{.aoc-yellow}
+[`r comma(nrow(df4_2))`]{.aoc-green}. [*]{.aoc-yellow}
 
 <!-- 
 # Day 5
@@ -280,6 +278,9 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+
 
 ```{r}
 #| label: read-day5-part2
@@ -289,6 +290,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 6
 
@@ -303,6 +306,8 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day6-part2
@@ -312,6 +317,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 7
 
@@ -326,6 +333,8 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day7-part2
@@ -335,6 +344,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 8
 
@@ -349,6 +360,8 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day8-part2
@@ -358,6 +371,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 9
 
@@ -372,6 +387,8 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day9-part2
@@ -381,6 +398,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 10
 
@@ -395,6 +414,8 @@ stars <- stars + 0
 
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day10-part2
@@ -404,6 +425,8 @@ stars <- stars + 0
 stars <- stars + 0
 ```
 
+The ... is
+[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 -->
 

@@ -227,7 +227,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The total points for this strategy are 10,994. <span class="aoc-yellow">*</span></p>
+<p>The total points for this strategy are <span class="aoc-green">10,994</span>. <span class="aoc-yellow">*</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -261,7 +261,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The total points for the updated strategy are 12,526. <span class="aoc-yellow">*</span></p>
+<p>The total points for the updated strategy are <span class="aoc-green">12,526</span>. <span class="aoc-yellow">*</span></p>
 </section>
 <section id="day-3-rucksack-reorganization" class="level1">
 <h1>Day 3: Rucksack Reorganization</h1>
@@ -297,7 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The total priority for the rucksacks is 7,821. <span class="aoc-yellow">*</span></p>
+<p>The total priority for the rucksacks is <span class="aoc-green">7,821</span>. <span class="aoc-yellow">*</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>
@@ -315,7 +315,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The total priority for the badges is 2,752. <span class="aoc-yellow">*</span></p>
+<p>The total priority for the badges is <span class="aoc-green">2,752</span>. <span class="aoc-yellow">*</span></p>
 </section>
 <section id="day-4-camp-cleanup" class="level1">
 <h1>Day 4: Camp Cleanup</h1>
@@ -331,63 +331,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    (elf1_min <span class="sc">&lt;=</span> elf2_min <span class="sc">&amp;</span> elf1_max <span class="sc">&gt;=</span> elf2_max) <span class="sc">|</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    (elf2_min <span class="sc">&lt;=</span> elf1_min <span class="sc">&amp;</span> elf2_max <span class="sc">&gt;=</span> elf1_max) </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 448 × 5
-   elf1_min elf1_max elf2_min elf2_max  pair
-      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;
- 1       26       27       26       91     4
- 2       29       68       29       70     7
- 3       29       30       29       44    15
- 4        8       59        8       98    21
- 5       74       86        7       87    28
- 6       49       65       49       64    30
- 7       48       61       11       88    32
- 8       46       51       46       50    33
- 9        4       93        5       92    37
-10       31       90       19       91    40
-# … with 438 more rows</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  ) </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The assignment pairs where one fully contains the other is 448. <span class="aoc-yellow">*</span></p>
+<p>The assignment pairs where one fully contains the other is <span class="aoc-green">448</span>. <span class="aoc-yellow">*</span></p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df4_2 <span class="ot">&lt;-</span> df4 <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    (elf1_max <span class="sc">&gt;=</span> elf2_min <span class="sc">&amp;</span> elf1_max <span class="sc">&lt;=</span> elf2_max) <span class="sc">|</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    (elf2_max <span class="sc">&gt;=</span> elf1_min <span class="sc">&amp;</span> elf2_max <span class="sc">&lt;=</span> elf1_max)  </span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 794 × 5
-   elf1_min elf1_max elf2_min elf2_max  pair
-      &lt;int&gt;    &lt;int&gt;    &lt;int&gt;    &lt;int&gt; &lt;int&gt;
- 1        8       18       10       19     1
- 2       12       69        8       15     2
- 3       26       27       26       91     4
- 4       17       43       18       44     6
- 5       29       68       29       70     7
- 6       15       90       28       91     8
- 7        8       39       10       40     9
- 8       47       64       27       63    10
- 9       20       22       21       98    13
-10       52       53       53       98    14
-# … with 784 more rows</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df4_2 <span class="ot">&lt;-</span> df4 <span class="sc">|&gt;</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    (elf1_max <span class="sc">&gt;=</span> elf2_min <span class="sc">&amp;</span> elf1_max <span class="sc">&lt;=</span> elf2_max) <span class="sc">|</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    (elf2_max <span class="sc">&gt;=</span> elf1_min <span class="sc">&amp;</span> elf2_max <span class="sc">&lt;=</span> elf1_max)  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The assignment pairs where they overlap is 794. <span class="aoc-yellow">*</span></p>
+<p>The assignment pairs where they overlap is <span class="aoc-green">794</span>. <span class="aoc-yellow">*</span></p>
 <!-- 
 # Day 5
 
@@ -401,6 +363,12 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -409,6 +377,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 6
 
@@ -422,6 +392,11 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -430,6 +405,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 7
 
@@ -443,6 +420,11 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -451,6 +433,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 8
 
@@ -464,6 +448,11 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -472,6 +461,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 9
 
@@ -485,6 +476,11 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -493,6 +489,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 10
 
@@ -506,6 +504,11 @@ stars <- stars + 0
 ```
 :::
 
+
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
+
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -514,6 +517,8 @@ stars <- stars + 0
 :::
 
 
+The ... is
+[999]{.aoc-green}. [*]{.aoc-yellow}
 
 -->
 </section>
