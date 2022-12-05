@@ -502,6 +502,7 @@ The total number of [stars]{.aoc-yellow} earned is
 # Potential improvements
 
 - Read files straight from website rather than copying, but this won't work for the example data
+- Using a PAT for Github access from RStudio Cloud is painful
 
 # Source code
 
