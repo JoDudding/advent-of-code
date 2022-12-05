@@ -48,9 +48,7 @@ stars <- 0
 
 ```
 
-# Day 1
-
-## Calorie Counting
+# Day 1: Calorie Counting
 
 [Instructions](https://adventofcode.com/2022/day/1)
 
@@ -92,9 +90,7 @@ stars <- stars + 1
 The calories carried by the top three elves is
 [`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 2
-
-## Rock Paper Scissors
+# Day 2: Rock Paper Scissors
 
 [Instructions](https://adventofcode.com/2022/day/2)
 
@@ -166,9 +162,7 @@ The total points for the updated strategy are
 [`r comma(sum(df2_p2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 3
-
-## Rucksack Reorganization
+# Day 3: Rucksack Reorganization
 
 [Instructions](https://adventofcode.com/2022/day/3)
 
@@ -228,9 +222,7 @@ The total priority for the badges is
 [`r comma(sum(df3_2$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 4
-
-## Camp Cleanup
+# Day 4: Camp Cleanup
 
 [Instructions](https://adventofcode.com/2022/day/4)
 
@@ -273,9 +265,7 @@ The assignment pairs where they overlap is
 [`r comma(nrow(df4_2))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 5
-
-## Supply Stacks
+# Day 5: Supply Stacks
 
 [Instructions](https://adventofcode.com/2022/day/5)
 
@@ -508,6 +498,10 @@ The ... is
 
 The total number of [stars]{.aoc-yellow} earned is
 [`r stars`]{.aoc-green}.
+
+# Potential improvements
+
+- Read files straight from website rather than copying, but this won't work for the example data
 
 # Source code
 
