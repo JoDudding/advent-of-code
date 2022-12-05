@@ -48,7 +48,9 @@ stars <- 0
 
 ```
 
-# Day 1: Calorie Counting
+# Day 1
+
+## Calorie Counting
 
 [Instructions](https://adventofcode.com/2022/day/1)
 
@@ -90,7 +92,9 @@ stars <- stars + 1
 The calories carried by the top three elves is
 [`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 2: Rock Paper Scissors
+# Day 2
+
+## Rock Paper Scissors
 
 [Instructions](https://adventofcode.com/2022/day/2)
 
@@ -162,7 +166,9 @@ The total points for the updated strategy are
 [`r comma(sum(df2_p2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 3: Rucksack Reorganization
+# Day 3
+
+## Rucksack Reorganization
 
 [Instructions](https://adventofcode.com/2022/day/3)
 
@@ -222,7 +228,9 @@ The total priority for the badges is
 [`r comma(sum(df3_2$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 4: Camp Cleanup
+# Day 4
+
+## Camp Cleanup
 
 [Instructions](https://adventofcode.com/2022/day/4)
 
@@ -264,34 +272,100 @@ stars <- stars + 1
 The assignment pairs where they overlap is
 [`r comma(nrow(df4_2))`]{.aoc-green}. [*]{.aoc-yellow}
 
-<!-- 
+
 # Day 5
+
+## Supply Stacks
 
 [Instructions](https://adventofcode.com/2022/day/5)
 
 ```{r}
 #| label: read-day5-part1
 
+df5 <- readLines('inputs/day5-part1.csv')
+
+movements <- tibble(crates = df5) |> 
+  filter(cumsum(str_trim(crates) == '') > 0 & str_trim(crates) != '') |> 
+  separate(crates, into = c('move', 'move_num', 'from', 'stack_from', 'to', 'stack_to'), sep = ' ', convert = TRUE) |> 
+  select(-move, -from, -to) 
+
+stack <- df5[cumsum(str_trim(df5) == '') == 0]
+
+stack_nums <- (str_length(tail(stack, 1)) + 1) %/% 4
+stack_seq <- seq(2, stack_nums * 4, by = 4)
+
+stack_list <- map(stack_seq, ~rev(str_sub(stack, .x, .x)))
+#names(stack_list) = paste0('stack_', 1:stack_nums)
+adj_stack <- map(stack_list, ~ .x[str_trim(.x) != ''])
 
 
-stars <- stars + 0
+#' need to do
+#' get the last item in the from list
+#' add it to the end of the to list
+#' update the from list to remove it
+#' repeat for the number of moves
+
+
+move <- function(stack_from, stack_to) {
+  start_stack <- adj_stack[[stack_from]]
+  end_stack <- adj_stack[[stack_to]]
+  
+  to_move <- tail(start_stack, 1)
+  
+  adj_stack[[stack_to]] <<- c(end_stack, to_move)
+  adj_stack[[stack_from]] <<- start_stack[1:length(start_stack)-1]
+}
+
+move_times <- function(move_num, stack_from, stack_to) {
+  for(i in 1:move_num) {move(stack_from, stack_to)}
+}
+
+
+pwalk(movements, move_times)
+
+
+final_stack <- adj_stack
+
+message <- paste(map(final_stack, ~tail(.x, 1)), collapse = '')
+
+stars <- stars + 1
 
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The crates on the top of each stack are
+[`r message`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 ```{r}
 #| label: read-day5-part2
 
+adj_stack <- map(stack_list, ~ .x[str_trim(.x) != ''])
+
+move2 <- function(move_num, stack_from, stack_to) {
+  start_stack <- adj_stack[[stack_from]]
+  end_stack <- adj_stack[[stack_to]]
+  
+  to_move <- tail(start_stack, move_num)
+  
+  adj_stack[[stack_to]] <<- c(end_stack, to_move)
+  
+  adj_stack[[stack_from]] <<- start_stack[1:(length(start_stack)-move_num)] 
+}
+
+pwalk(movements, move2)
+
+final_stack <- adj_stack
+
+message2 <- paste(map(final_stack, ~tail(.x, 1)), collapse = '')
 
 
-stars <- stars + 0
+stars <- stars + 1
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+With the new crane the crates on the top of each stack are
+[`r message2`]{.aoc-green}. [*]{.aoc-yellow}
+
+<!-- 
 
 # Day 6
 
