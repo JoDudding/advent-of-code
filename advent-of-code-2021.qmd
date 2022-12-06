@@ -1,0 +1,100 @@
+---
+  title : Advent of Code 2021
+subtitle: "[adventofcode.com](https://adventofcode.com/){.aoc-yellow}"
+#author: Jo Dudding
+#date: today
+format: 
+  html:
+  #embed-resources: true
+  #standalone: true
+  fig-width: 8
+fig-height: 4
+theme: ['advent-of-code.scss']
+highlight-style: nord
+toc: true
+toc_float: 
+  collapsed: true
+code-fold: true  
+execute: 
+  echo: true
+warning: false
+message: false
+knitr: 
+  opts_knit: 
+  root-dir: "`r here::here()`"
+---
+  
+# Introduction
+
+This analysis is my attempt at [adventofcode.com](https://adventofcode.com/2021) using R and Quarto.
+
+Here's an overview from [adventofcode.com](https://adventofcode.com/2021).
+
+> You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
+> 
+> Before you know it, you're inside a submarine the Elves keep ready for situations like this. It's covered in Christmas lights (because of course it is), and it even has an experimental antenna that should be able to track the keys if you can boost its signal strength high enough; there's a little meter that indicates the antenna's signal strength by displaying 0-50 [stars]{.aoc-yellow}.
+> 
+> Your instincts tell you that in order to save Christmas, you'll need to get all [fifty stars]{.aoc-yellow} by December 25th.
+> 
+> Collect stars by solving puzzles. Two puzzles will be made available on each day in the Advent calendar; the second puzzle is unlocked when you complete the first. Each puzzle grants [one star]{.aoc-yellow}. Good luck!
+
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(scales)
+library(here)
+
+stars <- 0
+
+```
+
+# Day 1: Sonar Sweep
+
+[Instructions](https://adventofcode.com/2021/day/1)
+
+```{r}
+#| label: day1-part1
+raw_1 <- readLines('inputs/2021-day1.csv')
+
+df2_1 <- tibble(depth = as.numeric(raw_1)) |> 
+  mutate(
+    row = row_number(),
+    change = if_else(
+      row == 1,
+      0,
+      depth - lag(depth)
+    )
+  )
+
+increases <- sum(df2_1$change > 0)
+
+
+stars <- stars + 1
+```
+
+There were 
+`r comma(increases)`
+increases.
+
+```{r}
+#| label: day1-part1
+
+
+```
+
+
+# Source code
+
+The source code can be found at [github.com/JoDudding/advent-of-code](https://github.com/JoDudding/advent-of-code).
+
+```{bash}
+#| label: quarto-preview-instruction
+#| echo: false
+
+# quarto preview index.qmd
+# quarto render index.qmd
+
+```
+

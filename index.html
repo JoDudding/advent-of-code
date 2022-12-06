@@ -114,6 +114,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#day-3-rucksack-reorganization" id="toc-day-3-rucksack-reorganization" class="nav-link" data-scroll-target="#day-3-rucksack-reorganization">Day 3: Rucksack Reorganization</a></li>
   <li><a href="#day-4-camp-cleanup" id="toc-day-4-camp-cleanup" class="nav-link" data-scroll-target="#day-4-camp-cleanup">Day 4: Camp Cleanup</a></li>
   <li><a href="#day-5-supply-stacks" id="toc-day-5-supply-stacks" class="nav-link" data-scroll-target="#day-5-supply-stacks">Day 5: Supply Stacks</a></li>
+  <li><a href="#day-6-tuning-trouble" id="toc-day-6-tuning-trouble" class="nav-link" data-scroll-target="#day-6-tuning-trouble">Day 6: Tuning Trouble</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#potential-improvements" id="toc-potential-improvements" class="nav-link" data-scroll-target="#potential-improvements">Potential improvements</a></li>
   <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
@@ -436,35 +437,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 <p>With the new crane the crates on the top of each stack are <span class="aoc-green">CJVLJQPHS</span>. <span class="aoc-yellow">*</span></p>
+</section>
+<section id="day-6-tuning-trouble" class="level1">
+<h1>Day 6: Tuning Trouble</h1>
+<p><a href="https://adventofcode.com/2022/day/6">Instructions</a></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>raw_6 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day6-part1.csv'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df_6 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">chars =</span> <span class="fu">str_split</span>(raw_6, <span class="at">pattern =</span> <span class="st">''</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(chars) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">marker =</span> <span class="fu">if_else</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      row <span class="sc">&lt;=</span> <span class="dv">3</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">FALSE</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>     chars <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">3</span>) <span class="sc">&amp;</span> chars <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">2</span>) <span class="sc">&amp;</span> chars <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">1</span>) <span class="sc">&amp;</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>     <span class="fu">lag</span>(chars, <span class="dv">1</span>) <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">3</span>) <span class="sc">&amp;</span> <span class="fu">lag</span>(chars, <span class="dv">1</span>) <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">2</span>) <span class="sc">&amp;</span> </span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>     <span class="fu">lag</span>(chars, <span class="dv">2</span>) <span class="sc">!=</span> <span class="fu">lag</span>(chars, <span class="dv">3</span>)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>sop <span class="ot">&lt;-</span> df_6 <span class="sc">|&gt;</span> </span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(marker <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(row)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The start of packet marker is at <span class="aoc-green">1,100</span>. <span class="aoc-yellow">*</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>chars <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">str_split</span>(raw_6, <span class="at">pattern =</span> <span class="st">''</span>))</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>som <span class="ot">&lt;-</span> <span class="fu">map_dfc</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">13</span>, <span class="sc">~</span><span class="fu">lag</span>(chars, .x)) <span class="sc">|&gt;</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(row <span class="sc">&gt;=</span> <span class="dv">14</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(<span class="sc">-</span>row, <span class="at">key =</span> <span class="st">'lag'</span>,<span class="at">value =</span> <span class="st">'value'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(row) <span class="sc">|&gt;</span> </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_distinct =</span> <span class="fu">n_distinct</span>(value)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_distinct <span class="sc">==</span> <span class="dv">14</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(row)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The start of message marker is at <span class="aoc-green">2,421</span>. <span class="aoc-yellow">*</span></p>
 <!-- 
-
-# Day 6
-
-[Instructions](https://adventofcode.com/2022/day/6)
-
-
-::: {.cell}
-
-```{.r .cell-code}
-stars <- stars + 0
-```
-:::
-
-
-The ... is
-[999]{.aoc-green}. [*]{.aoc-yellow}
-
-
-::: {.cell}
-
-```{.r .cell-code}
-stars <- stars + 0
-```
-:::
-
-
-The ... is
-[999]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 7
 
@@ -582,12 +607,13 @@ The ... is
 </section>
 <section id="total-stars" class="level1">
 <h1>Total stars</h1>
-<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">10</span>.</p>
+<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">12</span>.</p>
 </section>
 <section id="potential-improvements" class="level1">
 <h1>Potential improvements</h1>
 <ul>
 <li>Read files straight from website rather than copying, but this won’t work for the example data</li>
+<li>Using a PAT for Github access from RStudio Cloud is painful</li>
 </ul>
 </section>
 <section id="source-code" class="level1">

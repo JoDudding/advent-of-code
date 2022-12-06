@@ -355,34 +355,67 @@ stars <- stars + 1
 With the new crane the crates on the top of each stack are
 [`r message2`]{.aoc-green}. [*]{.aoc-yellow}
 
-<!-- 
 
-# Day 6
+# Day 6: Tuning Trouble
 
 [Instructions](https://adventofcode.com/2022/day/6)
 
 ```{r}
 #| label: read-day6-part1
 
+raw_6 <- readLines('inputs/day6-part1.csv')
 
+df_6 <- tibble(chars = str_split(raw_6, pattern = '')) |>  
+  unnest(chars) |> 
+  mutate(
+    row = row_number(),
+    marker = if_else(
+      row <= 3,
+      FALSE,
+     chars != lag(chars, 3) & chars != lag(chars, 2) & chars != lag(chars, 1) &
+     lag(chars, 1) != lag(chars, 3) & lag(chars, 1) != lag(chars, 2) & 
+     lag(chars, 2) != lag(chars, 3)
+    )
+  )
 
-stars <- stars + 0
+sop <- df_6 |> 
+  filter(marker == TRUE) |> 
+  slice(1) |> 
+  pull(row)
+
+stars <- stars + 1
 
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The start of packet marker is at
+[`r comma(sop)`]{.aoc-green}. [*]{.aoc-yellow}
+
 
 ```{r}
 #| label: read-day6-part2
 
+chars <- unlist(str_split(raw_6, pattern = ''))
 
+som <- map_dfc(0:13, ~lag(chars, .x)) |> 
+  mutate(row = row_number()) |> 
+  filter(row >= 14) |> 
+  gather(-row, key = 'lag',value = 'value') |> 
+  group_by(row) |> 
+  summarise(
+    n_distinct = n_distinct(value)
+  ) |> 
+  filter(n_distinct == 14) |> 
+  slice(1) |> 
+  pull(row)
 
-stars <- stars + 0
+stars <- stars + 1
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The start of message marker is at
+[`r comma(som)`]{.aoc-green}. [*]{.aoc-yellow}
+
+
+<!-- 
 
 # Day 7
 
