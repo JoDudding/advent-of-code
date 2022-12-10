@@ -23,6 +23,9 @@ aoc_yellow <- '#ffff66'
 #-------------------------------------------------------------------------------
 
 update_geom_defaults("col", list(fill = aoc_green, colour = NA))
+update_geom_defaults("line", list(fill = NA, colour = aoc_green))
+update_geom_defaults("path", list(fill = NA, colour = aoc_green))
+update_geom_defaults("text", list(fill = NA, colour = aoc_white))
 
 #-------------------------------------------------------------------------------
 #' create theme
@@ -116,7 +119,7 @@ theme_aoc <- function(
       ),
       
       strip.text = element_text(
-        colour = aoc_white, 
+        colour = aoc_green, 
         size = rel(0.9), 
         face = "bold",
         hjust = 0

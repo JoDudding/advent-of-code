@@ -44,6 +44,7 @@ library(tidyverse)
 library(scales)
 library(here)
 library(gfonts)
+library(patchwork)
 
 options(
   dplyr.width = Inf,
@@ -679,9 +680,9 @@ visible <- tibble(trees = raw_8) |>
 
 
 visible |> 
-  ggplot(aes(row, column, fill =  tree)) + 
+  ggplot(aes(column, -row, fill =  tree, label = tree)) + 
   geom_tile() +
-  #geom_text(colour = 'white') +
+  #geom_text(colour = aoc_black) +
   scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
   coord_fixed() +
   theme_aoc_null() +
@@ -702,8 +703,9 @@ The total number of visible trees is
 #| fig-height: 8
 
 visible |> 
-  ggplot(aes(row, column, fill = visible, label = tree)) + 
+  ggplot(aes(column, -row, fill = visible, label = tree)) + 
   geom_tile() +
+  #geom_text(colour = aoc_black) +
   scale_fill_manual(values = c('FALSE' = aoc_yellow, 'TRUE' = aoc_dgreen)) +
   coord_fixed() +
   theme_aoc_null() +
@@ -717,23 +719,137 @@ visible |>
 
 ```{r}
 #| label: read-day8-part2
+#| fig-height: 8
+#| eval: false
 
+see_direction <- function(t) {
+  n <- length(t)
+  see <- accumulate(t, ~ c(.x, .y), .dir = 'backward')
+  ex_me <- map(1:n, ~see[[.x]][-1])
+  lower <- map(1:n, ~coalesce(sum(t[[.x]] > cummax(ex_me[[.x]]), 0)))
+  first_higher <- map(1:n, ~coalesce(max(t[[.x]] <= cummax(ex_me[[.x]]),0)))
+  unlist(map(1:n, ~lower[[.x]] + first_higher[[.x]]))
+}
+
+scenic <- visible |> 
+  select(1:4) |> 
+  group_by(row) |> 
+  mutate(
+    see_up = see_direction(tree),
+    see_down = order_by(-column, see_direction(tree))
+  ) |> 
+  group_by(column) |> 
+  mutate(
+    see_right = see_direction(tree),
+    see_left = order_by(-row, see_direction(tree)),
+    scenic_score = see_up * see_down * see_right * see_left
+  ) |> 
+  ungroup()
+
+
+
+highest_scenic <- scenic |> 
+  filter(scenic_score == max(scenic_score))
+
+scenic |> 
+  ggplot(aes(column, -row, fill = scenic_score, label = scenic_score)) + 
+  geom_tile() +
+  #geom_text(colour = aoc_black) +
+  scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
+  coord_fixed() +
+  theme_aoc_null() +
+  labs(
+    title = 'Scenic scores for trees'
+  ) +
+  guides(fill = 'none')
 
 
 stars <- stars + 0
+
+#The highest scenic score for a tree is
+#[`r comma(max(highest_scenic$scenic_score))`]{.aoc-green}. [*]{.aoc-yellow}
+
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+> Part 2 still to come
 
-<!-- 
 
-# Day 9
+# Day 9: Rope Bridge
 
 [Instructions](https://adventofcode.com/2022/day/9)
 
+
+In progress:
+
+- Need to see the current position of tail vs head
+- Accumulate to collect the tail position
+- Need the accumulate to use a function that looks at the lagged tail position
+
+
+
 ```{r}
 #| label: read-day9-part1
+#| fig-height: 8
+
+df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |> 
+  separate(lines, into = c('direction', 'moves'), convert = TRUE) |> 
+  uncount(moves) |> 
+  mutate(
+    row = row_number(),
+    x = case_when(
+      direction == 'R' ~ 1,
+      direction == 'L' ~ -1,
+      TRUE ~ 0
+    ),
+    y = case_when(
+      direction == 'D' ~ 1,
+      direction == 'U' ~ -1,
+      TRUE ~ 0
+    )
+  ) |> 
+  add_row(
+    row = 0, x = 0, y = 0, .before = TRUE
+  ) |> 
+  mutate(
+    heads_x = coalesce(cumsum(x), 0),
+    heads_y = coalesce(cumsum(y))
+  )
+
+df_9 |> 
+  #filter(row <= 11) |> 
+  ggplot(aes(heads_x, -heads_y, label = row)) +
+  geom_path() +
+  geom_point(size = 5) +
+  geom_text() +
+  coord_fixed() +
+  theme_aoc_null() +
+  labs(
+    title = 'Heads path'
+  )
+```
+
+
+
+```{r}
+
+#| label: read-day9-part1b
+#| fig-height: 8
+#| eval: false
+
+head <- df_9$heads_x[1:4]
+heads_y <- df_9$heads_y[1:4]
+
+follow <- function(tail, head) {
+  if (abs(head - tail) <= 1) {
+    tail 
+  } else {
+    
+  }
+}
+
+
+# accumulate
+
 
 
 
@@ -755,21 +871,40 @@ stars <- stars + 0
 The ... is
 [`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 10
+# Day 10: Cathode-Ray Tube
 
 [Instructions](https://adventofcode.com/2022/day/10)
 
 ```{r}
 #| label: read-day10-part1
 
+df_10 <- tibble(lines = readLines('inputs/day10.csv')) |> 
+  separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |> 
+  mutate(row = row_number()) |> 
+  mutate(
+    count = if_else(instruction == 'noop', 1, 2)
+  ) |> 
+  uncount(count) |> 
+  add_row(moves = 0) |> 
+  mutate(
+    cycle = row_number(),
+    moves = coalesce(row == lag(row) | is.na(row), FALSE) * coalesce(moves, 0),
+    x = head(accumulate(moves, `+`, .init = 1), -1),
+    signal_strength = cycle * x
+  ) 
 
+combined_ss <- df_10 |> 
+  slice(20, 60, 100, 140, 180, 220) |> 
+  summarise(signal_strength = sum(signal_strength)) |> 
+  pull()
 
-stars <- stars + 0
+stars <- stars + 1
+
 
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The combined signal strength is
+[`r comma(combined_ss)`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
 #| label: read-day10-part2
@@ -782,7 +917,7 @@ stars <- stars + 0
 The ... is
 [`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
--->
+
 
 # Total stars
 
