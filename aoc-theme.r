@@ -137,6 +137,7 @@ theme_set(theme_aoc())
 #-------------------------------------------------------------------------------
 
 theme_aoc_null <- function() {
+  theme_aoc() +
   theme(
     panel.grid = element_blank(),
     panel.grid.major.x = element_blank(),
@@ -155,6 +156,7 @@ theme_aoc_null <- function() {
 #-------------------------------------------------------------------------------
 
 theme_aoc_heat <- function() {
+  theme_aoc() +
   theme(
     axis.line.x = element_blank(),
     axis.line.y = element_blank(),

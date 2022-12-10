@@ -684,7 +684,7 @@ visible |>
   #geom_text(colour = 'white') +
   scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
   coord_fixed() +
-  theme_void() +
+  theme_aoc_null() +
   labs(
     title = 'Tree heights'
   ) +
@@ -704,10 +704,9 @@ The total number of visible trees is
 visible |> 
   ggplot(aes(row, column, fill = visible, label = tree)) + 
   geom_tile() +
-  #geom_text(colour = 'white') +
   scale_fill_manual(values = c('FALSE' = aoc_yellow, 'TRUE' = aoc_dgreen)) +
   coord_fixed() +
-  theme_void() +
+  theme_aoc_null() +
   labs(
     title = 'Visible trees'
   ) +
@@ -794,6 +793,8 @@ The total number of [stars]{.aoc-yellow} earned is
 
 - Read files straight from website rather than copying, but this won't work for the example data
 - Using a PAT for Github access from RStudio Cloud is painful
+- Circle back to improve after reviewing other peoples code.
+- Use the same Fira Code font for the charts
 
 # Source code
 
