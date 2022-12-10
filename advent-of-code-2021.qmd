@@ -1,27 +1,27 @@
 ---
-  title : Advent of Code 2021
+title : Advent of Code 2021
 subtitle: "[adventofcode.com](https://adventofcode.com/){.aoc-yellow}"
 #author: Jo Dudding
 #date: today
 format: 
   html:
-  #embed-resources: true
-  #standalone: true
-  fig-width: 8
-fig-height: 4
-theme: ['advent-of-code.scss']
-highlight-style: nord
-toc: true
-toc_float: 
-  collapsed: true
-code-fold: true  
+    #embed-resources: true
+    #standalone: true
+    fig-width: 8
+    fig-height: 4
+    theme: ['advent-of-code.scss']
+    highlight-style: nord
+    toc: true
+    toc_float: 
+      collapsed: true
+    code-fold: true  
 execute: 
   echo: true
-warning: false
-message: false
+  warning: false
+  message: false
 knitr: 
   opts_knit: 
-  root-dir: "`r here::here()`"
+    root-dir: "`r here::here()`"
 ---
   
 # Introduction
@@ -79,11 +79,93 @@ There were
 increases.
 
 ```{r}
-#| label: day1-part1
+#| label: day1-part2
 
+df2_1b <- df2_1 |> 
+  mutate(
+    sumlag = depth + lag(depth, 1) + lag(depth, 2) ,
+    change_3 = if_else(
+      row <= 3,
+      0,
+      sumlag - lag(sumlag)
+    )
+  )
+
+increases_lagged <- sum(df2_1b$change_3 > 0)
+
+stars <- stars + 1
 
 ```
 
+With the lag there were 
+`r comma(increases_lagged)`
+increases.
+
+# Day 2: Dive!
+
+[Instructions](https://adventofcode.com/2021/day/2)
+
+```{r}
+#| label: day2-part1
+df_2 <- tibble(x = readLines('inputs/2021-day2.csv')) |> 
+  separate(x, into = c('direction', 'size'), convert = TRUE) |> 
+  mutate(
+    depth = case_when(
+      direction == 'down' ~ size,
+      direction == 'up' ~ -size,
+      TRUE ~ 0L
+    ),
+    horizontal = case_when(
+      direction == 'forward' ~ size,
+      TRUE ~ 0L
+    ),
+    cum_depth = cumsum(depth),
+    cum_horizontal = cumsum(horizontal)
+  )
+
+
+depth_horiz <- df_2 |> 
+  filter(row_number() == n()) |> 
+  mutate(
+    mult = cum_depth * cum_horizontal
+  ) |> 
+  pull(mult)
+
+stars <- stars + 1
+```
+
+The sum was
+`r comma(depth_horiz)`.
+
+```{r}
+#| label: day2-part2
+
+df_2b <- df_2 |> 
+  mutate(
+    aim = depth,
+    cum_aim = cum_depth,
+    depth = case_when(
+      direction == 'forward' ~ size * cum_aim,
+      TRUE ~ 0L
+      
+    ),
+    cum_depth = cumsum(depth)
+  )
+
+depth_horiz2 <- df_2b |> 
+  filter(row_number() == n()) |> 
+  mutate(
+    mult = cum_depth * cum_horizontal
+  ) |> 
+  pull(mult)
+
+
+stars <- stars + 1
+
+```
+
+The sum was
+`r comma(depth_horiz2)`.
 
 # Source code
 
@@ -93,8 +175,8 @@ The source code can be found at [github.com/JoDudding/advent-of-code](https://gi
 #| label: quarto-preview-instruction
 #| echo: false
 
-# quarto preview index.qmd
-# quarto render index.qmd
+# quarto preview advent-of-code-2021.qmd
+# quarto render advent-of-code-2021.qmd
 
 ```
 

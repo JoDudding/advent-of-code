@@ -43,6 +43,24 @@ Here's an overview from [adventofcode.com](https://adventofcode.com/).
 library(tidyverse)
 library(scales)
 library(here)
+library(gfonts)
+
+options(
+  dplyr.width = Inf,
+  papersize = "a4",
+  tab.width = 2,
+  width = 80,
+  max.print = 25,
+  stringsAsFactors = FALSE,
+  lubridate.week.start = 6,
+  tibble.print_max = 25,
+  tibble.print_min = 25,
+  tibble.width = Inf,
+  dplyr.summarise.inform = FALSE,
+  tidyverse.quiet = TRUE
+)
+
+source('aoc-theme.r')
 
 stars <- 0
 
@@ -415,15 +433,179 @@ The start of message marker is at
 [`r comma(som)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-<!-- 
-
-# Day 7
+# Day 7: No Space Left On Device
 
 [Instructions](https://adventofcode.com/2022/day/7)
 
+> Still in progress
+
 ```{r}
 #| label: read-day7-part1
+#| eval: false
 
+
+# Given a path like c("/", "/a/", "/a/b"), and dir "c",
+# return c("/", "/a", "/a/b", "/a/b/c")- that is, every folder it's in
+cd <- function(path, dir) {
+  if (!is.na(dir)) {
+    if (dir == "..") {
+      return(head(path, -1))
+    }
+    return(c(path, paste0(tail(path, 1), "/", dir)))
+  }
+  return(path)
+}
+
+# Keep track of the cd lines
+dir_sizes <- raw_7 %>%
+  select(x = instruct) |> 
+  extract(x, "cd_dir", "cd (.*)", remove = FALSE) %>%
+  mutate(
+    path = c(accumulate(cd_dir, cd)),
+    row = row_number()
+  ) %>%
+  unnest(path) %>%
+  filter(str_detect(x, "\\d")) %>%
+  separate(x, c("size", "file"), sep = " ", convert = TRUE) 
+
+dir_summary <- raw_7 |> 
+  mutate(
+    path_row = case_when(! is.na(cd) ~ row)
+  ) |>
+  fill(path_row) |> 
+  filter(type != 'command') |> 
+  filter(! is.na(file_size)) |> 
+  left_join(levels, by = 'path_row') |> 
+  select(x = instruct, row, size = file_size, file_name, path)
+  group_by(path) |> 
+  summarise(
+    file_size = sum(file_size, na.rm = TRUE),
+    num_files = sum(type == 'file'),
+    num_dir = sum(type == 'folder')
+  ) |> 
+  ungroup()
+
+dir_summary |> 
+  anti_join(dir_sizes, by = c('row', 'path'))
+
+
+dir_summary |> 
+  filter(file_name == 'rlhz.pbs')
+
+dir_sizes |> 
+  filter(file == 'rlhz.pbs')
+
+raw_7 |> 
+  filter(row <= 59) |> 
+  filter(! is.na(cd) | file_name == 'rlhz.pbs') |> 
+  tail()
+
+path_sum <- dir_sizes %>%
+  group_by(path) %>%
+  summarize(size = sum(size))
+
+# Part 1
+dir_sizes %>%
+  filter(size < 100000) %>%
+  summarize(sum(size))
+
+# Part 2
+dir_sizes %>%
+  filter(size > (45349983 + 30000000 - 70000000)) %>%
+  summarize(min(size))
+
+
+
+dir_summary |> 
+  left_join(dir_sizes, by = 'path')
+
+
+
+raw_7 <- tibble(instruct = readLines('inputs/day7-part1.csv')) |> 
+  mutate(
+    row = row_number(),
+    command = case_when(
+      str_sub(instruct, 1, 1) == '$' ~ str_sub(instruct, 3)
+    ),
+    #file = case_when(
+    #  is.na(command) ~ str_split(instruct, pattern = ' ', n = 2, simplify = TRUE)
+    #),
+    file_size = as.numeric(str_extract(instruct, '([:alnum:]+)\\b')),
+    file_name = if_else(
+      !is.na(file_size),
+      str_extract(instruct, '(\\b[:alnum:]+\\.[:alnum:]+)$'),
+      str_extract(instruct, '(\\b[:alnum:]+)$')
+    ),
+    type = case_when(
+      !is.na(command) ~ 'command',
+      !is.na(file_size) ~ 'file',
+      TRUE ~ 'folder'
+    ),
+    cd = case_when(str_sub(command, 1, 2) == 'cd' ~ str_sub(command, 4))
+  )
+
+
+levels <- raw_7 |> 
+  filter(! is.na(cd)) |> 
+  select(row, cd) |> 
+  mutate(
+    orig_cd = cd,
+    level = cumsum(case_when(
+      cd == '/' ~ 0,
+      cd == '..' ~ -1,
+      TRUE ~ 1
+    )),
+    cd = if_else(cd == '..', lag(cd, 2), cd),
+    cd = if_else(cd == '..', lag(cd, 3), cd),
+    cd = if_else(cd == '..', lag(cd, 4), cd),
+    cd = if_else(cd == '..', lag(cd, 5), cd),
+    cd = if_else(cd == '..', lag(cd, 6), cd),
+    levelx = level
+  ) |> 
+  filter(row <= 57)
+  spread(
+    key = level, value = cd
+  ) |> 
+  gather(-row, -levelx, key = 'key', value = 'value') |> 
+  mutate(key = as.integer(key)) |> 
+  arrange(row, levelx) |> 
+  filter(key <= levelx) |> 
+  select(-levelx) |> 
+  group_by(key) |> 
+  fill(value) |> 
+  ungroup() |> 
+  group_by(row) |> 
+  mutate(
+    path = accumulate(value, paste, sep = '/')
+  ) |> 
+  rename(path_row = row)
+
+dir_summary <- raw_7 |> 
+  mutate(
+    path_row = case_when(! is.na(cd) ~ row)
+  ) |>
+  fill(path_row) |> 
+  filter(type != 'command') |> 
+  left_join(levels, by = 'path_row') |> 
+  #filter(path == '//brdsppd/bcfqd/lsprzlbf')
+  group_by(path, value) |> 
+  summarise(
+    file_size = sum(file_size, na.rm = TRUE),
+    num_files = sum(type == 'file'),
+    num_dir = sum(type == 'folder')
+  ) |> 
+  ungroup()
+
+## probably need to make sure a file is not counted twice
+
+dir_summary |> 
+  filter(file_size <= 100000) |> 
+  summarise(file_size = sum(file_size)) |> 
+  pull()
+
+
+# not 1907645 - too high
+  
 
 
 stars <- stars + 0
@@ -435,30 +617,104 @@ The ... is
 
 ```{r}
 #| label: read-day7-part2
+#| eval: false
 
-
-
-stars <- stars + 0
 ```
+
 
 The ... is
 [`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 8
+# Day 8: Treetop Tree House
 
 [Instructions](https://adventofcode.com/2022/day/8)
 
 ```{r}
 #| label: read-day8-part1
+#| fig-height: 8
+
+raw_8 <- readLines('inputs/day8-part1.csv')
+
+visible <- tibble(trees = raw_8) |> 
+  mutate(
+    tree = str_split(trees, ""),
+    row = row_number()
+    ) |> 
+  group_by(row) |> 
+  unnest(tree) |> 
+  #filter(row == 1) |> 
+  mutate(
+    tree = as.numeric(tree),
+    column = row_number(),
+    row_down = cummax(tree),
+    visible = if_else(
+      row_number() == 1,
+      TRUE,
+      tree > lag(row_down)
+    ),
+    row_up = order_by(-column, cummax(tree)),
+    visible = if_else(
+      visible | row_number() == n(),
+      TRUE,
+      tree > lead(row_up)
+    )
+  ) |> 
+  group_by(column) |> 
+  mutate(
+    row_right = cummax(tree),
+    visible = if_else(
+      visible | row_number() == 1,
+      TRUE,
+      tree > lag(row_right)
+    ),
+    row_left = order_by(-row, cummax(tree)),
+    visible = if_else(
+      visible | row_number() == n(),
+      TRUE,
+      tree > lead(row_left)
+    ),
+  ) |> 
+  ungroup()
 
 
 
-stars <- stars + 0
+visible |> 
+  ggplot(aes(row, column, fill =  tree)) + 
+  geom_tile() +
+  #geom_text(colour = 'white') +
+  scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
+  coord_fixed() +
+  theme_void() +
+  labs(
+    title = 'Tree heights'
+  ) +
+  guides(fill = 'none')
+
+stars <- stars + 1
 
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The total number of visible trees is
+[`r comma(sum(visible$visible))`]{.aoc-green}. [*]{.aoc-yellow}
+
+```{r}
+#| label: read-day8-part1-chart
+#| fig-height: 8
+
+visible |> 
+  ggplot(aes(row, column, fill = visible, label = tree)) + 
+  geom_tile() +
+  #geom_text(colour = 'white') +
+  scale_fill_manual(values = c('FALSE' = aoc_yellow, 'TRUE' = aoc_dgreen)) +
+  coord_fixed() +
+  theme_void() +
+  labs(
+    title = 'Visible trees'
+  ) +
+  guides(fill = 'none')
+
+```
+
 
 ```{r}
 #| label: read-day8-part2
@@ -470,6 +726,8 @@ stars <- stars + 0
 
 The ... is
 [`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+
+<!-- 
 
 # Day 9
 
@@ -540,6 +798,8 @@ The total number of [stars]{.aoc-yellow} earned is
 # Source code
 
 The source code can be found at [github.com/JoDudding/advent-of-code](https://github.com/JoDudding/advent-of-code).
+
+Last year's advent of code (that I'm doing this year) can be found [here](advent-of-code-2021.html).
 
 ```{bash}
 #| label: quarto-preview-instruction
