@@ -442,88 +442,18 @@ The start of message marker is at
 
 ```{r}
 #| label: read-day7-part1
-#| eval: false
-#| include: false
 
-
-# Given a path like c("/", "/a/", "/a/b"), and dir "c",
-# return c("/", "/a", "/a/b", "/a/b/c")- that is, every folder it's in
-cd <- function(path, dir) {
-  if (!is.na(dir)) {
-    if (dir == "..") {
+pth <- function(path, cd) {
+  if (!is.na(cd)) {
+    if (cd == "..") {
       return(head(path, -1))
     }
-    return(c(path, paste0(tail(path, 1), "/", dir)))
+    return(c(path, paste0(tail(path, 1), "/", cd)))
   }
   return(path)
 }
 
-# Keep track of the cd lines
-dir_sizes <- raw_7 %>%
-  select(x = instruct) |> 
-  extract(x, "cd_dir", "cd (.*)", remove = FALSE) %>%
-  mutate(
-    path = c(accumulate(cd_dir, cd)),
-    row = row_number()
-  ) %>%
-  unnest(path) %>%
-  filter(str_detect(x, "\\d")) %>%
-  separate(x, c("size", "file"), sep = " ", convert = TRUE) 
-
-dir_summary <- raw_7 |> 
-  mutate(
-    path_row = case_when(! is.na(cd) ~ row)
-  ) |>
-  fill(path_row) |> 
-  filter(type != 'command') |> 
-  filter(! is.na(file_size)) |> 
-  left_join(levels, by = 'path_row') |> 
-  select(x = instruct, row, size = file_size, file_name, path)
-  group_by(path) |> 
-  summarise(
-    file_size = sum(file_size, na.rm = TRUE),
-    num_files = sum(type == 'file'),
-    num_dir = sum(type == 'folder')
-  ) |> 
-  ungroup()
-
-dir_summary |> 
-  anti_join(dir_sizes, by = c('row', 'path'))
-
-
-dir_summary |> 
-  filter(file_name == 'rlhz.pbs')
-
-dir_sizes |> 
-  filter(file == 'rlhz.pbs')
-
-raw_7 |> 
-  filter(row <= 59) |> 
-  filter(! is.na(cd) | file_name == 'rlhz.pbs') |> 
-  tail()
-
-path_sum <- dir_sizes %>%
-  group_by(path) %>%
-  summarize(size = sum(size))
-
-# Part 1
-dir_sizes %>%
-  filter(size < 100000) %>%
-  summarize(sum(size))
-
-# Part 2
-dir_sizes %>%
-  filter(size > (45349983 + 30000000 - 70000000)) %>%
-  summarize(min(size))
-
-
-
-dir_summary |> 
-  left_join(dir_sizes, by = 'path')
-
-
-
-raw_7 <- tibble(instruct = readLines('inputs/day7-part1.csv')) |> 
+df_7 <- tibble(instruct = readLines('inputs/day7-part1.csv')) |> 
   mutate(
     row = row_number(),
     command = case_when(
@@ -544,91 +474,52 @@ raw_7 <- tibble(instruct = readLines('inputs/day7-part1.csv')) |>
       TRUE ~ 'folder'
     ),
     cd = case_when(str_sub(command, 1, 2) == 'cd' ~ str_sub(command, 4))
-  )
-
-
-levels <- raw_7 |> 
-  filter(! is.na(cd)) |> 
-  select(row, cd) |> 
-  mutate(
-    orig_cd = cd,
-    level = cumsum(case_when(
-      cd == '/' ~ 0,
-      cd == '..' ~ -1,
-      TRUE ~ 1
-    )),
-    cd = if_else(cd == '..', lag(cd, 2), cd),
-    cd = if_else(cd == '..', lag(cd, 3), cd),
-    cd = if_else(cd == '..', lag(cd, 4), cd),
-    cd = if_else(cd == '..', lag(cd, 5), cd),
-    cd = if_else(cd == '..', lag(cd, 6), cd),
-    levelx = level
   ) |> 
-  filter(row <= 57)
-  spread(
-    key = level, value = cd
-  ) |> 
-  gather(-row, -levelx, key = 'key', value = 'value') |> 
-  mutate(key = as.integer(key)) |> 
-  arrange(row, levelx) |> 
-  filter(key <= levelx) |> 
-  select(-levelx) |> 
-  group_by(key) |> 
-  fill(value) |> 
-  ungroup() |> 
-  group_by(row) |> 
+  select(row, cd, file_size) |> 
   mutate(
-    path = accumulate(value, paste, sep = '/')
+    path = accumulate(cd, pth)
   ) |> 
-  rename(path_row = row)
-
-dir_summary <- raw_7 |> 
-  mutate(
-    path_row = case_when(! is.na(cd) ~ row)
-  ) |>
-  fill(path_row) |> 
-  filter(type != 'command') |> 
-  left_join(levels, by = 'path_row') |> 
-  #filter(path == '//brdsppd/bcfqd/lsprzlbf')
-  group_by(path, value) |> 
+  unnest(path) |> 
+  filter(!is.na(file_size)) |> 
+  group_by(path) |> 
   summarise(
-    file_size = sum(file_size, na.rm = TRUE),
-    num_files = sum(type == 'file'),
-    num_dir = sum(type == 'folder')
+    file_size = sum(file_size)
   ) |> 
   ungroup()
 
-## probably need to make sure a file is not counted twice
-
-dir_summary |> 
-  filter(file_size <= 100000) |> 
-  summarise(file_size = sum(file_size)) |> 
+tot_u100k <- df_7 |> 
+  filter(file_size < 100000)  |> 
+  summarise(sum(file_size)) |> 
   pull()
 
 
-# not 1907645 - too high
-  
-
-
-stars <- stars + 0
-
-#The ... is
-#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+stars <- stars + 1
 
 ```
 
+The total directory size is
+[`r comma(tot_u100k)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 ```{r}
 #| label: read-day7-part2
-#| eval: false
-#| include: false
 
+tot_space <- 70000000
+unused_space <- tot_space - max(df_7$file_size)
+unused_required <- 30000000
+to_delete <- unused_required - unused_space
+
+dir_size <- df_7 |> 
+  arrange(file_size) |> 
+  filter(file_size >= to_delete) |> 
+  head(1) |> 
+  pull(file_size)
+
+stars <- stars + 1
 ```
 
-
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+The best folder to delete has a size of
+[`r comma(dir_size)`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 8: Treetop Tree House
 
@@ -795,8 +686,6 @@ In progress:
 ```{r}
 #| label: read-day9-part1
 #| fig-height: 8
-#| eval: false
-#| include: false
 
 df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |> 
   separate(lines, into = c('direction', 'moves'), convert = TRUE) |> 
@@ -824,9 +713,13 @@ df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |>
 
 df_9 |> 
   #filter(row <= 11) |> 
+  mutate(
+    firstlast = case_when(row == 0 | row == max(row) ~ heads_x)
+  ) |> 
   ggplot(aes(heads_x, -heads_y, label = row)) +
   geom_path() +
-  geom_point(size = 5) +
+  geom_point(size = 7) +
+  geom_point(size = 7, colour = aoc_green, aes(x = firstlast)) +
   geom_text() +
   #coord_fixed() +
   theme_aoc_null() +
@@ -912,16 +805,19 @@ in_three <- function(x, y) {
 
 df_10 |> 
   mutate(
-    display_column = cycle %% 40,
-    display_row = cycle %/% 40,
+    #display_column = cycle %% 40,
+    #display_row = cycle %/% 40,
     position = 1:n() - 1,
-    match = in_three(position, x),
     sprite = case_when(
-      moves == a_moves ~
-        paste(
-          rep('.', times = x - 1), 'XXX', collapse = ''
-        )
+      position == 0 ~ 1, 
+      a_moves != 0 ~ x
     )
+  ) |> 
+  select(-row) |> 
+  fill(sprite) |> 
+  mutate(
+    sprite = lead(sprite),
+    visible = in_three(position, sprite)
   )
 
 
