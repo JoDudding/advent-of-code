@@ -438,7 +438,6 @@ The start of message marker is at
 
 [Instructions](https://adventofcode.com/2022/day/7)
 
-> Still in progress
 
 ```{r}
 #| label: read-day7-part1
@@ -675,14 +674,6 @@ stars <- stars + 0
 [Instructions](https://adventofcode.com/2022/day/9)
 
 
-In progress:
-
-- Need to see the current position of tail vs head
-- Accumulate to collect the tail position
-- Need the accumulate to use a function that looks at the lagged tail position
-
-
-
 ```{r}
 #| label: read-day9-part1
 #| fig-height: 8
@@ -733,8 +724,7 @@ visited <- df_9a |>
   distinct(tails_x, tails_y) |> 
   nrow()
 
-
-tail(df_9a)
+stars <- stars + 0
 
 bind_rows(
   df_9a |>
@@ -754,8 +744,6 @@ bind_rows(
     colour = NULL,
     title = 'Heads and tails paths'
   )
-
-stars <- stars + 0
 
 ```
 
@@ -846,6 +834,67 @@ stars <- stars + 0
 #[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 ```
 
+# Day 11: Monkey in the Middle
+
+[Instructions](https://adventofcode.com/2022/day/11)
+
+> In progress
+
+```{r}
+#| label: read-day11-part1
+
+df_11 <- tibble(lines = readLines('inputs/day11-eg.csv')) |> 
+  #separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |> 
+  mutate(
+    row = row_number(),
+    from_monkey = case_when(
+      str_sub(lines, 1, 2) == 'Mo' ~ parse_number(lines)
+    ),
+    worry_start = case_when(
+      str_sub(lines, 3, 4) == 'St' ~ str_sub(lines, 19) |> 
+        str_split(pattern = ', ')
+    ),
+    operation = case_when(
+      str_sub(lines, 3, 4) == 'Op' ~ str_sub(lines, 20)
+    ),
+    test_divide = case_when(
+      str_sub(lines, 3, 4) == 'Te' ~ parse_number(lines)
+    ),
+    true_monkey = case_when(
+      str_sub(lines, 8, 8) == 't' ~ parse_number(lines)
+    ),
+    false_monkey = case_when(
+      str_sub(lines, 8, 8) == 'f' ~ parse_number(lines)
+    ),
+    turn = from_monkey + 1  
+  ) |> 
+  fill(turn) |> 
+  group_by(turn) |> 
+  fill( from_monkey, worry_start, operation, test_divide, true_monkey, false_monkey) |> 
+  filter(row == max(row)) |> 
+  ungroup() |> 
+  select(-lines, -row)
+
+# need a function to to the following steps for each item in a turn
+# and then add the items to the lists for the to_monkeys
+
+x <- df_11 |>  
+  unnest(worry_start) |> 
+  mutate(
+    item = row_number()
+  )  |> 
+  group_by(row = row_number()) |> 
+  mutate(
+    worry_inspect = eval(parse(text = str_replace_all(operation, 'old', worry_start))),
+    worry_relief = worry_inspect %/% 3,
+    test = worry_relief %% test_divide == 0,
+    monkey_to = if_else(test, true_monkey, false_monkey)
+  ) |> 
+  ungroup()
+
+
+
+```
 
 # Total stars
 
@@ -858,6 +907,7 @@ The total number of [stars]{.aoc-yellow} earned is
 - Using a PAT for Github access from RStudio Cloud is painful
 - Circle back to improve after reviewing other peoples code.
 - Use the same Fira Code font for the charts
+- Put a border around the charts
 
 # Source code
 
