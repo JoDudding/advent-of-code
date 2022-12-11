@@ -711,23 +711,57 @@ df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |>
     heads_y = coalesce(cumsum(y))
   )
 
-df_9 |> 
-  #filter(row <= 11) |> 
+follow <- function(tail, head) {
+  if(max(abs(head - tail)) <= 1) {return(tail)}
+  map2_dbl(tail, head, ~ .x + sign(.y - .x))
+}
+
+df_9a <- df_9 |> 
   mutate(
-    firstlast = case_when(row == 0 | row == max(row) ~ heads_x)
+    head = map2(heads_x, heads_y,  c)
   ) |> 
-  ggplot(aes(heads_x, -heads_y, label = row)) +
+  mutate(
+    tailxy = accumulate(head, follow, .init = c(0, 0))[-1]
+  )  |> 
+  group_by(row) |> 
+  mutate(
+    tails_x = pluck(unlist(tailxy), 1),
+    tails_y = pluck(unlist(tailxy), 2)
+  )
+
+visited <- df_9a |> 
+  distinct(tails_x, tails_y) |> 
+  nrow()
+
+
+tail(df_9a)
+
+bind_rows(
+  df_9a |>
+    transmute(
+      type = 'Heads', row, x = heads_x, y = heads_y
+    ),
+  df_9a |>
+    transmute(
+      type = 'Tails', row, x = tails_x, y = tails_y
+    )
+) |> 
+  ggplot(aes(x, -y, colour = type)) +
   geom_path() +
-  geom_point(size = 7) +
-  geom_point(size = 7, colour = aoc_green, aes(x = firstlast)) +
-  geom_text() +
-  #coord_fixed() +
+  scale_colour_manual(values = c('Heads' = aoc_white, 'Tails' = aoc_green)) +
   theme_aoc_null() +
   labs(
-    title = 'Heads path'
+    colour = NULL,
+    title = 'Heads and tails paths'
   )
+
+stars <- stars + 0
+
 ```
 
+The number of positions visited **NOT** is
+[`r comma(visited)`]{.aoc-green}. [*]{.aoc-yellow}
+It's too high and I'll have to keep trying.
 
 
 ```{r}
@@ -735,22 +769,6 @@ df_9 |>
 #| fig-height: 8
 #| eval: false
 #| include: false
-
-head <- df_9$heads_x[1:4]
-heads_y <- df_9$heads_y[1:4]
-
-follow <- function(tail, head) {
-  if (abs(head - tail) <= 1) {
-    tail 
-  } else {
-    
-  }
-}
-
-
-# accumulate
-
-
 
 
 stars <- stars + 0
