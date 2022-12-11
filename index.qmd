@@ -443,6 +443,7 @@ The start of message marker is at
 ```{r}
 #| label: read-day7-part1
 #| eval: false
+#| include: false
 
 
 # Given a path like c("/", "/a/", "/a/b"), and dir "c",
@@ -611,14 +612,17 @@ dir_summary |>
 
 stars <- stars + 0
 
+#The ... is
+#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+
 
 ```{r}
 #| label: read-day7-part2
 #| eval: false
+#| include: false
 
 ```
 
@@ -684,7 +688,7 @@ visible |>
   geom_tile() +
   #geom_text(colour = aoc_black) +
   scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
-  coord_fixed() +
+  #coord_fixed() +
   theme_aoc_null() +
   labs(
     title = 'Tree heights'
@@ -707,7 +711,7 @@ visible |>
   geom_tile() +
   #geom_text(colour = aoc_black) +
   scale_fill_manual(values = c('FALSE' = aoc_yellow, 'TRUE' = aoc_dgreen)) +
-  coord_fixed() +
+  #coord_fixed() +
   theme_aoc_null() +
   labs(
     title = 'Visible trees'
@@ -721,6 +725,7 @@ visible |>
 #| label: read-day8-part2
 #| fig-height: 8
 #| eval: false
+#| include: false
 
 see_direction <- function(t) {
   n <- length(t)
@@ -756,7 +761,7 @@ scenic |>
   geom_tile() +
   #geom_text(colour = aoc_black) +
   scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
-  coord_fixed() +
+  #coord_fixed() +
   theme_aoc_null() +
   labs(
     title = 'Scenic scores for trees'
@@ -790,6 +795,8 @@ In progress:
 ```{r}
 #| label: read-day9-part1
 #| fig-height: 8
+#| eval: false
+#| include: false
 
 df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |> 
   separate(lines, into = c('direction', 'moves'), convert = TRUE) |> 
@@ -821,7 +828,7 @@ df_9 |>
   geom_path() +
   geom_point(size = 5) +
   geom_text() +
-  coord_fixed() +
+  #coord_fixed() +
   theme_aoc_null() +
   labs(
     title = 'Heads path'
@@ -831,10 +838,10 @@ df_9 |>
 
 
 ```{r}
-
 #| label: read-day9-part1b
 #| fig-height: 8
 #| eval: false
+#| include: false
 
 head <- df_9$heads_x[1:4]
 heads_y <- df_9$heads_y[1:4]
@@ -854,22 +861,10 @@ follow <- function(tail, head) {
 
 
 stars <- stars + 0
-
+#The ... is
+#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 ```
 
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
-
-```{r}
-#| label: read-day9-part2
-
-
-
-stars <- stars + 0
-```
-
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 10: Cathode-Ray Tube
 
@@ -888,10 +883,10 @@ df_10 <- tibble(lines = readLines('inputs/day10.csv')) |>
   add_row(moves = 0) |> 
   mutate(
     cycle = row_number(),
-    moves = coalesce(row == lag(row) | is.na(row), FALSE) * coalesce(moves, 0),
-    x = head(accumulate(moves, `+`, .init = 1), -1),
+    a_moves = coalesce(row == lag(row) | is.na(row), FALSE) * coalesce(moves, 0),
+    x = head(accumulate(a_moves, `+`, .init = 1), -1),
     signal_strength = cycle * x
-  ) 
+  )
 
 combined_ss <- df_10 |> 
   slice(20, 60, 100, 140, 180, 220) |> 
@@ -908,15 +903,34 @@ The combined signal strength is
 
 ```{r}
 #| label: read-day10-part2
+#| eval: false
+#| include: false
 
+in_three <- function(x, y) {
+   x >= y & x <= y + 3
+}
+
+df_10 |> 
+  mutate(
+    display_column = cycle %% 40,
+    display_row = cycle %/% 40,
+    position = 1:n() - 1,
+    match = in_three(position, x),
+    sprite = case_when(
+      moves == a_moves ~
+        paste(
+          rep('.', times = x - 1), 'XXX', collapse = ''
+        )
+    )
+  )
 
 
 stars <- stars + 0
+
+
+#The ... is
+#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 ```
-
-The ... is
-[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
-
 
 
 # Total stars
