@@ -920,6 +920,59 @@ x <- df_11 |>
 
 ```
 
+# Day 12: Hill Climbing Algorithm
+
+[Instructions](https://adventofcode.com/2022/day/12)
+
+> In progress
+
+```{r}
+#| label: read-day12-part1
+
+lookup <- tibble(
+  height = 1:26,
+  letter = letters
+)
+
+height <- letters
+names(height) <- 1:26
+
+df_12 <- tibble(lines = readLines('inputs/day12.csv')) |> 
+  mutate(
+    letter = str_split(lines, ''),
+    row = row_number()
+  ) |> 
+  unnest_longer(letter) |> 
+  left_join(lookup, by = 'letter') |> 
+  group_by(row) |> 
+  mutate(
+    column = row_number(),
+    height = case_when(
+      letter == 'S' ~ 0L,
+      letter == 'E' ~ 27L,
+      TRUE ~ height
+    )
+  ) |> 
+  ungroup() |> 
+  select(-lines) |> 
+  print(20)
+
+
+df_12 |> 
+  ggplot(aes(x= column, y = -row, fill = height, label = letter)) +
+  geom_tile(colour = aoc_black) +
+  #geom_text(colour = aoc_white) +
+  scale_fill_continuous(low = aoc_yellow, high = aoc_dgreen) +
+  labs(
+    x = NULL, y = NULL, fill = NULL,
+    title = 'Terrain height'
+  ) +
+  theme_aoc_null() +
+  guides(fill = 'none')
+  
+```  
+
+
 # Total stars
 
 The total number of [stars]{.aoc-yellow} earned is
