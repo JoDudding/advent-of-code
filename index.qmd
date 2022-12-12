@@ -676,7 +676,6 @@ stars <- stars + 0
 
 ```{r}
 #| label: read-day9-part1
-#| fig-height: 8
 
 df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |> 
   separate(lines, into = c('direction', 'moves'), convert = TRUE) |> 
@@ -684,13 +683,13 @@ df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |>
   mutate(
     row = row_number(),
     x = case_when(
-      direction == 'R' ~ 1,
-      direction == 'L' ~ -1,
+      direction == 'R' ~ -1,
+      direction == 'L' ~ 1,
       TRUE ~ 0
     ),
     y = case_when(
-      direction == 'D' ~ 1,
-      direction == 'U' ~ -1,
+      direction == 'D' ~ -1,
+      direction == 'U' ~ 1,
       TRUE ~ 0
     )
   ) |> 
@@ -718,13 +717,14 @@ df_9a <- df_9 |>
   mutate(
     tails_x = pluck(unlist(tailxy), 1),
     tails_y = pluck(unlist(tailxy), 2)
-  )
+  ) |> 
+  ungroup()
 
 visited <- df_9a |> 
   distinct(tails_x, tails_y) |> 
   nrow()
 
-stars <- stars + 0
+stars <- stars + 1
 
 bind_rows(
   df_9a |>
@@ -736,7 +736,7 @@ bind_rows(
       type = 'Tails', row, x = tails_x, y = tails_y
     )
 ) |> 
-  ggplot(aes(x, -y, colour = type)) +
+  ggplot(aes(-x, y, colour = type)) +
   geom_path() +
   scale_colour_manual(values = c('Heads' = aoc_white, 'Tails' = aoc_green)) +
   theme_aoc_null() +
@@ -747,23 +747,47 @@ bind_rows(
 
 ```
 
-The number of positions visited **NOT** is
+The number of positions visited is
 [`r comma(visited)`]{.aoc-green}. [*]{.aoc-yellow}
-It's too high and I'll have to keep trying.
 
 
 ```{r}
 #| label: read-day9-part1b
-#| fig-height: 8
-#| eval: false
-#| include: false
 
 
-stars <- stars + 0
-#The ... is
-#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
+df_9b <- df_9 |> 
+  mutate(
+    head = map2(heads_x, heads_y,  c)
+  ) |> 
+  mutate(
+    tail1 = accumulate(head, follow, .init = c(0, 0))[-1],
+    tail2 = accumulate(tail1, follow, .init = c(0, 0))[-1],
+    tail3 = accumulate(tail2, follow, .init = c(0, 0))[-1],
+    tail4 = accumulate(tail3, follow, .init = c(0, 0))[-1],
+    tail5 = accumulate(tail4, follow, .init = c(0, 0))[-1],
+    tail6 = accumulate(tail5, follow, .init = c(0, 0))[-1],
+    tail7 = accumulate(tail6, follow, .init = c(0, 0))[-1],
+    tail8 = accumulate(tail7, follow, .init = c(0, 0))[-1],
+    tail9 = accumulate(tail8, follow, .init = c(0, 0))[-1]
+  )  |> 
+  group_by(row) |> 
+  mutate(
+    tails_x = pluck(unlist(tail9), 1),
+    tails_y = pluck(unlist(tail9), 2)
+  ) |> 
+  ungroup()
+
+visited_b <- df_9b |> 
+  distinct(tails_x, tails_y) |> 
+  nrow()
+
+
+stars <- stars + 1
+
 ```
 
+The number of positions visited by the ninth knot is
+[`r comma(visited_b)`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 10: Cathode-Ray Tube
 
