@@ -45,6 +45,7 @@ library(scales)
 library(here)
 library(gfonts)
 library(patchwork)
+library(jsonlite)
 
 options(
   dplyr.width = Inf,
@@ -972,6 +973,185 @@ df_12 |>
   
 ```  
 
+# Day 13: Distress Signal
+
+[Instructions](https://adventofcode.com/2022/day/13)
+
+> In progress
+
+```{r}
+#| label: read-day13-part1
+
+df_13 <- tibble(lines = readLines('inputs/day13.csv')) |> 
+  mutate(
+    pair = case_when(row_number() == 1 | lines == '' ~ cumsum(lines == '') + 1)
+  ) |> 
+  fill(pair) |> 
+  filter(lines != '') |> 
+  group_by(row = row_number()) |> 
+  mutate(
+    lists = map(lines, parse_json)
+  ) |> 
+  select(-lines) |> 
+  group_by(pair) |> 
+  mutate(row = paste0('list_', row_number())) |> 
+  spread(key = row, value = lists) |> 
+  ungroup()
+
+```
+
+# Day 14: Regolith Reservoir
+
+[Instructions](https://adventofcode.com/2022/day/14)
+
+> In progress
+
+```{r}
+#| label: read-day14
+
+df_14 <- tibble(lines = readLines('inputs/day14.txt')) |> 
+  mutate(
+    row = row_number(),
+    step = str_split(lines, ' -> ')
+  ) |> 
+  group_by(row) |> 
+  unnest_longer(step) |> 
+  mutate(
+    step_no = row_number()
+  ) |> 
+  separate(step, into = c('x', 'y'), sep = ',', convert = TRUE) |> 
+  mutate(
+    x_lag = coalesce(lag(x), x),
+    y_lag = coalesce(lag(y), y),
+    x = map2(x, x_lag, seq),
+    y = map2(y, y_lag, seq)
+  ) |> 
+  ungroup() |> 
+  unnest_longer(c(x, y)) |> 
+  distinct(row, x, y)
+
+full_cave <- crossing(
+  x = seq(min(df_14$x) - 2, max(df_14$x) + 2),
+  y = seq(0, max(df_14$y) + 1)
+) |> 
+  left_join(
+    df_14 |>  
+      mutate(pocket = 1), 
+  by = c('x', 'y')
+  ) |> 
+  mutate(
+    pocket = case_when(
+      ! is.na(pocket) ~ pocket,
+      x == max(x) ~ 1,
+      x == min(x) ~ 1,
+      TRUE ~ 0
+    ),
+    pocket_colour = if_else(pocket == 1, aoc_white, aoc_dgrey)
+  )
+
+
+full_cave |> 
+  ggplot(aes(x, -y, colour = I(pocket_colour))) +
+  geom_point() +
+  annotate('point', x = 500, y = 0, colour = aoc_yellow, shape = 18) +
+  scale_y_continuous(label = abs, limits = c(NA, 0), breaks = 0:min(-df_14$y)) +
+  scale_x_continuous(position = 'top', breaks = 0:max(df_14$x)) +
+  scale_colour_identity() +
+  labs(
+    x = NULL, y = NULL,
+    title = 'Rocks'
+  ) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_blank()
+  ) +
+  guides(x = 'none', y = 'none', colour = 'none')
+  
+```
+
+```{r}
+#| label: read-day14-part1
+#| include: false
+#| echo: false
+#| eval: false
+
+# https://twitter.com/drob/status/1602903058865954822/photo/1
+
+moves <- list(cbind(0, 1),
+              cbind(-1, 1),
+              cbind(1, 1))
+
+
+index_500 <- which(unique(full_cave$x) == 500)
+
+next_sand <- function(cave_matrix) {
+  position <- c(index_500, 0)
+  moved <- TRUE
+  while (moved) {
+    moved <- FALSE
+    for (move in moves) {
+      if (cave_matrix[position + move] == 0) {
+        position <- position + move
+        moved <- TRUE
+      }
+    }
+  }
+  return(position)
+}
+
+cave_matrix[position + moves[[1]]]
+
+
+cave_matrix <- matrix(full_cave$pocket, nrow = length(unique(full_cave$y)))
+
+
+while (TRUE) {
+  pos <- next_sand(cave_matrix)
+  cave_matrix[pos] <- 2
+  if (pos[2] == 0) {
+    break
+  }
+}
+
+
+# sum(cave_matrix == 2) + 1
+
+
+after_sand <- cave_matrix |> 
+  as_tibble() |> 
+  mutate(
+    y = row_number()
+  ) |> 
+  group_by(y) |> 
+  gather(-y, key = 'x', value = 'pocket') |> 
+  mutate(
+    x = parse_number(x) + min(full_cave$x) - 1,
+    pocket_colour = case_when(
+      pocket == 2 ~ aoc_green, 
+      pocket == 1 ~ aoc_white, 
+      pocket == 0 ~ aoc_dgrey
+    )
+  )
+
+after_sand |> 
+  ggplot(aes(x, -y, colour = I(pocket_colour))) +
+  geom_point() +
+  annotate('point', x = 500, y = 0, colour = aoc_yellow, shape = 18) +
+  #scale_y_continuous(label = abs, limits = c(NA, 0), breaks = 0:min(-df_14$y)) +
+  #scale_x_continuous(position = 'top', breaks = 0:max(df_14$x)) +
+  scale_colour_identity() +
+  labs(
+    x = NULL, y = NULL,
+    title = 'Rocks'
+  ) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_blank()
+  ) +
+  guides(x = 'none', y = 'none', colour = 'none')
+
+
+```
 
 # Total stars
 
