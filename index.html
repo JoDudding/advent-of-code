@@ -123,6 +123,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#day-12-hill-climbing-algorithm" id="toc-day-12-hill-climbing-algorithm" class="nav-link" data-scroll-target="#day-12-hill-climbing-algorithm">Day 12: Hill Climbing Algorithm</a></li>
   <li><a href="#day-13-distress-signal" id="toc-day-13-distress-signal" class="nav-link" data-scroll-target="#day-13-distress-signal">Day 13: Distress Signal</a></li>
   <li><a href="#day-14-regolith-reservoir" id="toc-day-14-regolith-reservoir" class="nav-link" data-scroll-target="#day-14-regolith-reservoir">Day 14: Regolith Reservoir</a></li>
+  <li><a href="#day-15-beacon-exclusion-zone" id="toc-day-15-beacon-exclusion-zone" class="nav-link" data-scroll-target="#day-15-beacon-exclusion-zone">Day 15: Beacon Exclusion Zone</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#potential-improvements" id="toc-potential-improvements" class="nav-link" data-scroll-target="#potential-improvements">Potential improvements</a></li>
   <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
@@ -1085,6 +1086,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/read-day14-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+</section>
+<section id="day-15-beacon-exclusion-zone" class="level1">
+<h1>Day 15: Beacon Exclusion Zone</h1>
+<p><a href="https://adventofcode.com/2022/day/15">Instructions</a></p>
+<blockquote class="blockquote">
+<p>In progress</p>
+</blockquote>
+<p>Just reading the data in is a challenge for some of these</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_15 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day15.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">':'</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor'</span>, <span class="st">'beacon'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(sensor, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor_x'</span>, <span class="st">'sensor_y'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(beacon, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'beacon_x'</span>, <span class="st">'beacon_y'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(parse_number) <span class="sc">|&gt;</span> </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pair =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">manhattan =</span> <span class="fu">abs</span>(sensor_x <span class="sc">-</span> beacon_x) <span class="sc">+</span> <span class="fu">abs</span>(sensor_y <span class="sc">-</span> beacon_y)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>df_15 <span class="sc">|&gt;</span> </span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(sensor_x == 8 &amp; sensor_y == 7) |&gt; </span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">group =</span> pair)) <span class="sc">+</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y, <span class="at">xend =</span> beacon_x, <span class="at">yend =</span> beacon_y),</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> aoc_white</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y), <span class="at">colour =</span> aoc_yellow, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> beacon_x, <span class="at">y =</span> beacon_y), <span class="at">colour =</span> aoc_green, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">position =</span> <span class="st">'top'</span>) <span class="sc">+</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Closest beacon to sensor'</span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/read-day15-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </section>

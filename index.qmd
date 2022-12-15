@@ -1153,6 +1153,71 @@ after_sand |>
 
 ```
 
+# Day 15: Beacon Exclusion Zone
+
+[Instructions](https://adventofcode.com/2022/day/15)
+
+> In progress
+
+Just reading the data in is a challenge for some of these
+
+
+```{r}
+#| label: read-day15
+
+df_15 <- tibble(lines = readLines('inputs/day15.txt')) |> 
+  separate(lines, sep = ':', into = c('sensor', 'beacon')) |> 
+  separate(sensor, sep = ',', into = c('sensor_x', 'sensor_y')) |> 
+  separate(beacon, sep = ',', into = c('beacon_x', 'beacon_y')) |> 
+  mutate_all(parse_number) |> 
+  mutate(
+    pair = row_number(),
+    manhattan = abs(sensor_x - beacon_x) + abs(sensor_y - beacon_y)
+  )
+
+df_15 |> 
+  #filter(sensor_x == 8 & sensor_y == 7) |> 
+  ggplot(aes(group = pair)) +
+  geom_segment(
+    aes(x = sensor_x, y = sensor_y, xend = beacon_x, yend = beacon_y),
+    colour = aoc_white
+  ) +
+  geom_point(aes(x = sensor_x, y = sensor_y), colour = aoc_yellow, size = 5) +
+  geom_point(aes(x = beacon_x, y = beacon_y), colour = aoc_green, shape = 18, size = 5) +
+  scale_x_continuous(position = 'top') +
+  scale_y_reverse() +
+  labs(
+    x = NULL, y = NULL,
+    title = 'Closest beacon to sensor'
+  )
+  
+
+
+```
+
+
+```{r}
+#| label: day15-a
+#| include: false
+#| echo: false
+#| eval: false
+
+
+eg <- df_15 |> 
+  filter(sensor_x == 8 & sensor_y == 7) |> 
+  as.list() 
+
+start_x <- (eg$sensor_x - eg$manhattan):(eg$sensor_x + eg$manhattan)
+start_y <- (eg$sensor_y - eg$manhattan):(eg$sensor_y + eg$manhattan)
+
+half_y <- c((eg$manhattan):1, 0:eg$manhattan)
+
+
+
+start_x[2:length(start_x)-1]  
+
+```
+
 # Total stars
 
 The total number of [stars]{.aoc-yellow} earned is
