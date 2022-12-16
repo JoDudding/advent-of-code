@@ -955,8 +955,7 @@ df_12 <- tibble(lines = readLines('inputs/day12.csv')) |>
     )
   ) |> 
   ungroup() |> 
-  select(-lines) |> 
-  print(20)
+  select(-lines) 
 
 
 df_12 |> 
@@ -1157,10 +1156,6 @@ after_sand |>
 
 [Instructions](https://adventofcode.com/2022/day/15)
 
-> In progress
-
-Just reading the data in is a challenge for some of these
-
 
 ```{r}
 #| label: read-day15
@@ -1189,34 +1184,110 @@ df_15 |>
   labs(
     x = NULL, y = NULL,
     title = 'Closest beacon to sensor'
-  )
-  
+  ) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_blank()
+  ) +
+  guides(x = 'none', y = 'none')
 
 
 ```
+
+Was working on test data but vectors were too big for actual data. Rewriting underway but still seems too big to run properly.
 
 
 ```{r}
 #| label: day15-a
-#| include: false
-#| echo: false
 #| eval: false
+#| echo: false
+#| include: false
+
+#row_of_interest <- 10
+row_of_interest <- 2000000
+
+combine_vecs <- function(s) {
+  unique(unlist(s))
+}
+
+df_of_interest <- df_15 |> 
+  mutate(
+    roi_manhattan = manhattan - abs(sensor_y - row_of_interest),
+    roi_min_x = sensor_x - roi_manhattan,
+    roi_max_x = sensor_x + roi_manhattan,
+    roi_length = abs(roi_max_x - roi_min_x),
+    roi_range = map2(roi_min_x, roi_max_x, seq)
+  ) |> 
+  arrange(-roi_length)
 
 
-eg <- df_15 |> 
-  filter(sensor_x == 8 & sensor_y == 7) |> 
-  as.list() 
+combine_vecs(df_of_interest$roi_range)
 
-start_x <- (eg$sensor_x - eg$manhattan):(eg$sensor_x + eg$manhattan)
-start_y <- (eg$sensor_y - eg$manhattan):(eg$sensor_y + eg$manhattan)
+unique_vals <- combine_vecs(df_of_interest$roi_range)
 
-half_y <- c((eg$manhattan):1, 0:eg$manhattan)
+beacon <-  df_15 |> 
+  filter(beacon_y   == row_of_interest) |> 
+  distinct(beacon_x) |> 
+  pull(beacon_x)
 
+removed_beacons <- unique_vals[-beacon]
 
+row_of_interest_covered <- length(removed_beacons)
+row_of_interest_covered
 
-start_x[2:length(start_x)-1]  
+stars <- stars + 0
 
 ```
+
+```{r}
+#| eval: false
+#| echo: false
+#| include: false
+
+cover_rows <- function(r) {
+
+  covered_rows <- tibble(
+      x = (eg$sensor_x - eg$manhattan):(eg$sensor_x + eg$manhattan)
+  ) |> 
+    mutate(
+      y = r,
+      centre_x = eg$sensor_x,
+      centre_y = eg$sensor_y,
+      manhattan = abs(centre_x - x) + abs(centre_y - y)
+    )  |> 
+    filter(manhattan <= eg$manhattan)
+
+}  
+
+
+get_covered <- function(pairnum){
+
+  eg <<- df_15 |> 
+    filter(pair == pairnum) |> 
+    as.list() 
+  
+  #rows <- (eg$sensor_y - eg$manhattan):(eg$sensor_y + eg$manhattan)
+  rows <- row_of_interest
+  
+  covered <- map_dfr(rows, cover_rows)
+}
+
+
+all_covered <- map_dfr(df_15$pair, get_covered) |> 
+  distinct(x, y) |> 
+  anti_join(
+    select(df_15, x = beacon_x , y = beacon_y),
+    by = c('x', 'y')
+  ) 
+ 
+
+row_10_covered <- all_covered |> 
+  filter(y == row_of_interest) |> 
+  nrow()
+```
+
+The number of positions where a beacon cannot be present on line 10 is **NOT**
+[`r comma(row_10_covered)`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Total stars
 
