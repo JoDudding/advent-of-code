@@ -124,6 +124,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#day-13-distress-signal" id="toc-day-13-distress-signal" class="nav-link" data-scroll-target="#day-13-distress-signal">Day 13: Distress Signal</a></li>
   <li><a href="#day-14-regolith-reservoir" id="toc-day-14-regolith-reservoir" class="nav-link" data-scroll-target="#day-14-regolith-reservoir">Day 14: Regolith Reservoir</a></li>
   <li><a href="#day-15-beacon-exclusion-zone" id="toc-day-15-beacon-exclusion-zone" class="nav-link" data-scroll-target="#day-15-beacon-exclusion-zone">Day 15: Beacon Exclusion Zone</a></li>
+  <li><a href="#day-16-proboscidea-volcanium" id="toc-day-16-proboscidea-volcanium" class="nav-link" data-scroll-target="#day-16-proboscidea-volcanium">Day 16: Proboscidea Volcanium</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#potential-improvements" id="toc-potential-improvements" class="nav-link" data-scroll-target="#potential-improvements">Potential improvements</a></li>
   <li><a href="#source-code" id="toc-source-code" class="nav-link" data-scroll-target="#source-code">Source code</a></li>
@@ -167,25 +168,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gfonts)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">dplyr.width =</span> <span class="cn">Inf</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">papersize =</span> <span class="st">"a4"</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">tab.width =</span> <span class="dv">2</span>,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">80</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">max.print =</span> <span class="dv">25</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">lubridate.week.start =</span> <span class="dv">6</span>,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.print_max =</span> <span class="dv">25</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.print_min =</span> <span class="dv">25</span>,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.width =</span> <span class="cn">Inf</span>,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">dplyr.summarise.inform =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidyverse.quiet =</span> <span class="cn">TRUE</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'aoc-theme.r'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidygraph)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggraph)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">dplyr.width =</span> <span class="cn">Inf</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">papersize =</span> <span class="st">"a4"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">tab.width =</span> <span class="dv">2</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">80</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">max.print =</span> <span class="dv">25</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">lubridate.week.start =</span> <span class="dv">6</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.print_max =</span> <span class="dv">25</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.print_min =</span> <span class="dv">25</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">tibble.width =</span> <span class="cn">Inf</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">dplyr.summarise.inform =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidyverse.quiet =</span> <span class="cn">TRUE</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'aoc-theme.r'</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -932,58 +935,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
 <span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>lines) <span class="sc">|&gt;</span> </span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2,870 ×
-#   4
-   letter   row
-   &lt;chr&gt;  &lt;int&gt;
- 1 a          1
- 2 b          1
- 3 c          1
- 4 c          1
- 5 c          1
- 6 c          1
- 7 c          1
- 8 c          1
- 9 c          1
-10 c          1
-11 c          1
-12 c          1
-13 c          1
-14 c          1
-15 c          1
-16 c          1
-17 c          1
-18 c          1
-19 c          1
-20 c          1
-21 a          1
-22 a          1
-23 a          1
-24 a          1
-25 a          1
-# … with 2,845 more
-#   rows, and 2
-#   more variables:
-#   height &lt;int&gt;,
-#   column &lt;int&gt;</code></pre>
-</div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_12 <span class="sc">|&gt;</span> </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> column, <span class="at">y =</span> <span class="sc">-</span>row, <span class="at">fill =</span> height, <span class="at">label =</span> letter)) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">colour =</span> aoc_black) <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(colour = aoc_white) +</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">low =</span> aoc_yellow, <span class="at">high =</span> aoc_dgreen) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>,</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Terrain height'</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_aoc_null</span>() <span class="sc">+</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>lines) </span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>df_12 <span class="sc">|&gt;</span> </span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span> column, <span class="at">y =</span> <span class="sc">-</span>row, <span class="at">fill =</span> height, <span class="at">label =</span> letter)) <span class="sc">+</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">colour =</span> aoc_black) <span class="sc">+</span></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#geom_text(colour = aoc_white) +</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_continuous</span>(<span class="at">low =</span> aoc_yellow, <span class="at">high =</span> aoc_dgreen) <span class="sc">+</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="cn">NULL</span>,</span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Terrain height'</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_aoc_null</span>() <span class="sc">+</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/read-day12-part1-1.png" class="img-fluid" width="768"></p>
@@ -999,21 +964,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_13 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day13.csv'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pair =</span> <span class="fu">case_when</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> lines <span class="sc">==</span> <span class="st">''</span> <span class="sc">~</span> <span class="fu">cumsum</span>(lines <span class="sc">==</span> <span class="st">''</span>) <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(pair) <span class="sc">|&gt;</span> </span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lines <span class="sc">!=</span> <span class="st">''</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lists =</span> <span class="fu">map</span>(lines, parse_json)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>lines) <span class="sc">|&gt;</span> </span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pair) <span class="sc">|&gt;</span> </span>
-<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">paste0</span>(<span class="st">'list_'</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
-<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> row, <span class="at">value =</span> lists) <span class="sc">|&gt;</span> </span>
-<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_13 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day13.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">pair =</span> <span class="fu">case_when</span>(<span class="fu">row_number</span>() <span class="sc">==</span> <span class="dv">1</span> <span class="sc">|</span> lines <span class="sc">==</span> <span class="st">''</span> <span class="sc">~</span> <span class="fu">cumsum</span>(lines <span class="sc">==</span> <span class="st">''</span>) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fill</span>(pair) <span class="sc">|&gt;</span> </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lines <span class="sc">!=</span> <span class="st">''</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lists =</span> <span class="fu">map</span>(lines, parse_json)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>lines) <span class="sc">|&gt;</span> </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(pair) <span class="sc">|&gt;</span> </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">paste0</span>(<span class="st">'list_'</span>, <span class="fu">row_number</span>())) <span class="sc">|&gt;</span> </span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">spread</span>(<span class="at">key =</span> row, <span class="at">value =</span> lists) <span class="sc">|&gt;</span> </span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -1026,63 +991,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_14 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day14.txt'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">step =</span> <span class="fu">str_split</span>(lines, <span class="st">' -&gt; '</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(row) <span class="sc">|&gt;</span> </span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(step) <span class="sc">|&gt;</span> </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">step_no =</span> <span class="fu">row_number</span>()</span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(step, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>), <span class="at">sep =</span> <span class="st">','</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x_lag =</span> <span class="fu">coalesce</span>(<span class="fu">lag</span>(x), x),</span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y_lag =</span> <span class="fu">coalesce</span>(<span class="fu">lag</span>(y), y),</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">map2</span>(x, x_lag, seq),</span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">map2</span>(y, y_lag, seq)</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(<span class="fu">c</span>(x, y)) <span class="sc">|&gt;</span> </span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(row, x, y)</span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>full_cave <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_14<span class="sc">$</span>x) <span class="sc">-</span> <span class="dv">2</span>, <span class="fu">max</span>(df_14<span class="sc">$</span>x) <span class="sc">+</span> <span class="dv">2</span>),</span>
-<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(df_14<span class="sc">$</span>y) <span class="sc">+</span> <span class="dv">1</span>)</span>
-<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
-<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
-<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>    df_14 <span class="sc">|&gt;</span>  </span>
-<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">pocket =</span> <span class="dv">1</span>), </span>
-<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)</span>
-<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
-<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">pocket =</span> <span class="fu">case_when</span>(</span>
-<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span> <span class="fu">is.na</span>(pocket) <span class="sc">~</span> pocket,</span>
-<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>      x <span class="sc">==</span> <span class="fu">max</span>(x) <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>      x <span class="sc">==</span> <span class="fu">min</span>(x) <span class="sc">~</span> <span class="dv">1</span>,</span>
-<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span></span>
-<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">pocket_colour =</span> <span class="fu">if_else</span>(pocket <span class="sc">==</span> <span class="dv">1</span>, aoc_white, aoc_dgrey)</span>
-<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>full_cave <span class="sc">|&gt;</span> </span>
-<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, <span class="sc">-</span>y, <span class="at">colour =</span> <span class="fu">I</span>(pocket_colour))) <span class="sc">+</span></span>
-<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">'point'</span>, <span class="at">x =</span> <span class="dv">500</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">colour =</span> aoc_yellow, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
-<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">label =</span> abs, <span class="at">limits =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">0</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">min</span>(<span class="sc">-</span>df_14<span class="sc">$</span>y)) <span class="sc">+</span></span>
-<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">position =</span> <span class="st">'top'</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(df_14<span class="sc">$</span>x)) <span class="sc">+</span></span>
-<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_identity</span>() <span class="sc">+</span></span>
-<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Rocks'</span></span>
-<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb27-53"><a href="#cb27-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb27-54"><a href="#cb27-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb27-55"><a href="#cb27-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>()</span>
-<span id="cb27-56"><a href="#cb27-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb27-57"><a href="#cb27-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="st">'none'</span>, <span class="at">y =</span> <span class="st">'none'</span>, <span class="at">colour =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>df_14 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day14.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">step =</span> <span class="fu">str_split</span>(lines, <span class="st">' -&gt; '</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(row) <span class="sc">|&gt;</span> </span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(step) <span class="sc">|&gt;</span> </span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">step_no =</span> <span class="fu">row_number</span>()</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(step, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>), <span class="at">sep =</span> <span class="st">','</span>, <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">x_lag =</span> <span class="fu">coalesce</span>(<span class="fu">lag</span>(x), x),</span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y_lag =</span> <span class="fu">coalesce</span>(<span class="fu">lag</span>(y), y),</span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">map2</span>(x, x_lag, seq),</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">map2</span>(y, y_lag, seq)</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(<span class="fu">c</span>(x, y)) <span class="sc">|&gt;</span> </span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(row, x, y)</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>full_cave <span class="ot">&lt;-</span> <span class="fu">crossing</span>(</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">seq</span>(<span class="fu">min</span>(df_14<span class="sc">$</span>x) <span class="sc">-</span> <span class="dv">2</span>, <span class="fu">max</span>(df_14<span class="sc">$</span>x) <span class="sc">+</span> <span class="dv">2</span>),</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">max</span>(df_14<span class="sc">$</span>y) <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> </span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    df_14 <span class="sc">|&gt;</span>  </span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">pocket =</span> <span class="dv">1</span>), </span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">pocket =</span> <span class="fu">case_when</span>(</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span> <span class="fu">is.na</span>(pocket) <span class="sc">~</span> pocket,</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>      x <span class="sc">==</span> <span class="fu">max</span>(x) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>      x <span class="sc">==</span> <span class="fu">min</span>(x) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="dv">0</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">pocket_colour =</span> <span class="fu">if_else</span>(pocket <span class="sc">==</span> <span class="dv">1</span>, aoc_white, aoc_dgrey)</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>full_cave <span class="sc">|&gt;</span> </span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, <span class="sc">-</span>y, <span class="at">colour =</span> <span class="fu">I</span>(pocket_colour))) <span class="sc">+</span></span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">'point'</span>, <span class="at">x =</span> <span class="dv">500</span>, <span class="at">y =</span> <span class="dv">0</span>, <span class="at">colour =</span> aoc_yellow, <span class="at">shape =</span> <span class="dv">18</span>) <span class="sc">+</span></span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">label =</span> abs, <span class="at">limits =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">0</span>), <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">min</span>(<span class="sc">-</span>df_14<span class="sc">$</span>y)) <span class="sc">+</span></span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">position =</span> <span class="st">'top'</span>, <span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="fu">max</span>(df_14<span class="sc">$</span>x)) <span class="sc">+</span></span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_identity</span>() <span class="sc">+</span></span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Rocks'</span></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="st">'none'</span>, <span class="at">y =</span> <span class="st">'none'</span>, <span class="at">colour =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/read-day14-1.png" class="img-fluid" width="768"></p>
@@ -1092,41 +1057,98 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="day-15-beacon-exclusion-zone" class="level1">
 <h1>Day 15: Beacon Exclusion Zone</h1>
 <p><a href="https://adventofcode.com/2022/day/15">Instructions</a></p>
-<blockquote class="blockquote">
-<p>In progress</p>
-</blockquote>
-<p>Just reading the data in is a challenge for some of these</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_15 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day15.txt'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">':'</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor'</span>, <span class="st">'beacon'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(sensor, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor_x'</span>, <span class="st">'sensor_y'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(beacon, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'beacon_x'</span>, <span class="st">'beacon_y'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(parse_number) <span class="sc">|&gt;</span> </span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pair =</span> <span class="fu">row_number</span>(),</span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">manhattan =</span> <span class="fu">abs</span>(sensor_x <span class="sc">-</span> beacon_x) <span class="sc">+</span> <span class="fu">abs</span>(sensor_y <span class="sc">-</span> beacon_y)</span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>df_15 <span class="sc">|&gt;</span> </span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(sensor_x == 8 &amp; sensor_y == 7) |&gt; </span></span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">group =</span> pair)) <span class="sc">+</span></span>
-<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
-<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y, <span class="at">xend =</span> beacon_x, <span class="at">yend =</span> beacon_y),</span>
-<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> aoc_white</span>
-<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y), <span class="at">colour =</span> aoc_yellow, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> beacon_x, <span class="at">y =</span> beacon_y), <span class="at">colour =</span> aoc_green, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">position =</span> <span class="st">'top'</span>) <span class="sc">+</span></span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
-<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
-<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Closest beacon to sensor'</span></span>
-<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df_15 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day15.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">':'</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor'</span>, <span class="st">'beacon'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(sensor, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'sensor_x'</span>, <span class="st">'sensor_y'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(beacon, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'beacon_x'</span>, <span class="st">'beacon_y'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_all</span>(parse_number) <span class="sc">|&gt;</span> </span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">pair =</span> <span class="fu">row_number</span>(),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">manhattan =</span> <span class="fu">abs</span>(sensor_x <span class="sc">-</span> beacon_x) <span class="sc">+</span> <span class="fu">abs</span>(sensor_y <span class="sc">-</span> beacon_y)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>df_15 <span class="sc">|&gt;</span> </span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#filter(sensor_x == 8 &amp; sensor_y == 7) |&gt; </span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">group =</span> pair)) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y, <span class="at">xend =</span> beacon_x, <span class="at">yend =</span> beacon_y),</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> aoc_white</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> sensor_x, <span class="at">y =</span> sensor_y), <span class="at">colour =</span> aoc_yellow, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> beacon_x, <span class="at">y =</span> beacon_y), <span class="at">colour =</span> aoc_green, <span class="at">shape =</span> <span class="dv">18</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">position =</span> <span class="st">'top'</span>) <span class="sc">+</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Closest beacon to sensor'</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">x =</span> <span class="st">'none'</span>, <span class="at">y =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/read-day15-1.png" class="img-fluid" width="768"></p>
+</div>
+</div>
+<p>Was working on test data but vectors were too big for actual data. Rewriting underway but still seems too big to run properly.</p>
+</section>
+<section id="day-16-proboscidea-volcanium" class="level1">
+<h1>Day 16: Proboscidea Volcanium</h1>
+<p><a href="https://adventofcode.com/2022/day/16">Instructions</a></p>
+<p>Looks like this is a network.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>df_16 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day16.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">';'</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'valves'</span>, <span class="st">'tunnel'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">valves =</span> <span class="fu">str_remove</span>(valves, <span class="st">'Valve</span><span class="sc">\\</span><span class="st">s'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_remove</span>(<span class="st">'has flow rate='</span>),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">to_valves =</span> <span class="fu">str_remove</span>(tunnel, <span class="st">'</span><span class="sc">\\</span><span class="st">stunnels?</span><span class="sc">\\</span><span class="st">sleads?</span><span class="sc">\\</span><span class="st">sto</span><span class="sc">\\</span><span class="st">svalves?</span><span class="sc">\\</span><span class="st">s'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_split</span>(<span class="at">pattern =</span> <span class="st">', '</span>),</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">valve_on =</span> <span class="cn">FALSE</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>tunnel) <span class="sc">|&gt;</span> </span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(valves, <span class="at">sep =</span> <span class="st">' '</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'valve'</span>, <span class="st">'flow'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>df_16_nodes <span class="ot">&lt;-</span> <span class="fu">select</span>(df_16, <span class="at">name =</span> valve  )</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>df_16_edges <span class="ot">&lt;-</span> df_16 <span class="sc">|&gt;</span> </span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="at">from =</span> valve  , to_valves ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_longer</span>(to_valves )</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>df_16_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> df_16_nodes, <span class="at">edges =</span> df_16_edges) <span class="sc">|&gt;</span> </span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(nodes) <span class="sc">|&gt;</span> </span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">node_on =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">flow =</span> df_16<span class="sc">$</span>flow,</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">open_time =</span> <span class="dv">1</span>,</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_node =</span> name <span class="sc">==</span> <span class="st">'AA'</span></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">activate</span>(edges) <span class="sc">|&gt;</span> </span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">tunnel_time =</span> <span class="dv">1</span></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>  )    </span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(df_16_graph) <span class="sc">+</span></span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="at">colour =</span> aoc_white) <span class="sc">+</span></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="at">size =</span> <span class="dv">5</span>, <span class="fu">aes</span>(<span class="at">colour =</span> start_node)) <span class="sc">+</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(aoc_green, aoc_yellow)) <span class="sc">+</span></span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_aoc_null</span>() <span class="sc">+</span></span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">'Valve and tunnel network'</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">colour =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/read-day16-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </section>

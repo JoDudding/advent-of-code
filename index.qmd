@@ -46,6 +46,8 @@ library(here)
 library(gfonts)
 library(patchwork)
 library(jsonlite)
+library(tidygraph)
+library(ggraph)
 
 options(
   dplyr.width = Inf,
@@ -1286,8 +1288,61 @@ row_10_covered <- all_covered |>
   nrow()
 ```
 
-The number of positions where a beacon cannot be present on line 10 is **NOT**
-[`r comma(row_10_covered)`]{.aoc-green}. [*]{.aoc-yellow}
+# Day 16: Proboscidea Volcanium
+
+[Instructions](https://adventofcode.com/2022/day/16)
+
+
+Looks like this is a network.
+
+```{r}
+#| label: read-day16
+
+
+df_16 <- tibble(lines = readLines('inputs/day16.txt')) |> 
+  separate(lines, sep = ';', into = c('valves', 'tunnel')) |> 
+  mutate(
+    valves = str_remove(valves, 'Valve\\s') |> 
+      str_remove('has flow rate='),
+    to_valves = str_remove(tunnel, '\\stunnels?\\sleads?\\sto\\svalves?\\s') |> 
+      str_split(pattern = ', '),
+    valve_on = FALSE
+  ) |> 
+  select(-tunnel) |> 
+  separate(valves, sep = ' ', into = c('valve', 'flow'), convert = TRUE)
+
+
+df_16_nodes <- select(df_16, name = valve  )
+
+df_16_edges <- df_16 |> 
+  select(from = valve  , to_valves ) |> 
+  unnest_longer(to_valves )
+
+
+df_16_graph <- tbl_graph(nodes = df_16_nodes, edges = df_16_edges) |> 
+  activate(nodes) |> 
+  mutate(
+    node_on = FALSE,
+    flow = df_16$flow,
+    open_time = 1,
+    start_node = name == 'AA'
+  ) |> 
+  activate(edges) |> 
+  mutate(
+    tunnel_time = 1
+  )    
+
+ggraph(df_16_graph) +
+  geom_edge_link(colour = aoc_white) +
+  geom_node_point(size = 5, aes(colour = start_node)) +
+  scale_colour_manual(values = c(aoc_green, aoc_yellow)) +
+  theme_aoc_null() +
+  labs(
+    title = 'Valve and tunnel network'
+  ) +
+  guides(colour = 'none')
+
+```  
 
 # Total stars
 
