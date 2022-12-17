@@ -72,9 +72,10 @@ stars <- 0
 
 ```
 
-# Day 1: Calorie Counting
+# Day 1
 
-[Instructions](https://adventofcode.com/2022/day/1)
+Calorie Counting
+
 
 ```{r}
 #| label: read-day1-part1
@@ -114,9 +115,9 @@ stars <- stars + 1
 The calories carried by the top three elves is
 [`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 2: Rock Paper Scissors
+# Day 2
 
-[Instructions](https://adventofcode.com/2022/day/2)
+Rock Paper Scissors
 
 ```{r}
 #| label: read-day2-part1
@@ -186,9 +187,9 @@ The total points for the updated strategy are
 [`r comma(sum(df2_p2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 3: Rucksack Reorganization
+# Day 3
 
-[Instructions](https://adventofcode.com/2022/day/3)
+Rucksack Reorganization
 
 ```{r}
 #| label: read-day3-part1
@@ -246,9 +247,9 @@ The total priority for the badges is
 [`r comma(sum(df3_2$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 4: Camp Cleanup
+# Day 4
 
-[Instructions](https://adventofcode.com/2022/day/4)
+Camp Cleanup
 
 ```{r}
 #| label: read-day4-part1
@@ -270,7 +271,6 @@ stars <- stars + 1
 The assignment pairs where one fully contains the other is
 [`r comma(nrow(df4_1))`]{.aoc-green}. [*]{.aoc-yellow}
 
-
 ```{r}
 #| label: read-day4-part2
 
@@ -284,14 +284,13 @@ df4_2 <- df4 |>
 stars <- stars + 1
 ```
 
-
 The assignment pairs where they overlap is
 [`r comma(nrow(df4_2))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 5: Supply Stacks
+# Day 5
 
-[Instructions](https://adventofcode.com/2022/day/5)
+Supply Stacks
 
 ```{r}
 #| label: read-day5-part1
@@ -380,9 +379,9 @@ With the new crane the crates on the top of each stack are
 [`r message2`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 6: Tuning Trouble
+# Day 6
 
-[Instructions](https://adventofcode.com/2022/day/6)
+Tuning Trouble
 
 ```{r}
 #| label: read-day6-part1
@@ -414,13 +413,15 @@ stars <- stars + 1
 The start of packet marker is at
 [`r comma(sop)`]{.aoc-green}. [*]{.aoc-yellow}
 
-
 ```{r}
 #| label: read-day6-part2
 
 chars <- unlist(str_split(raw_6, pattern = ''))
 
-som <- map_dfc(0:13, ~lag(chars, .x)) |> 
+mapover <- 0:13
+names(mapover) <- paste0('c',mapover)
+
+som <- map_dfc(mapover, ~lag(chars, .x)) |> 
   mutate(row = row_number()) |> 
   filter(row >= 14) |> 
   gather(-row, key = 'lag',value = 'value') |> 
@@ -439,10 +440,9 @@ The start of message marker is at
 [`r comma(som)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 7: No Space Left On Device
+# Day 7
 
-[Instructions](https://adventofcode.com/2022/day/7)
-
+No Space Left On Device
 
 ```{r}
 #| label: read-day7-part1
@@ -525,9 +525,9 @@ stars <- stars + 1
 The best folder to delete has a size of
 [`r comma(dir_size)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 8: Treetop Tree House
+# Day 8
 
-[Instructions](https://adventofcode.com/2022/day/8)
+Treetop Tree House
 
 ```{r}
 #| label: read-day8-part1
@@ -613,7 +613,6 @@ visible |>
   guides(fill = 'none')
 
 ```
-
 
 ```{r}
 #| label: read-day8-part2
@@ -715,10 +714,9 @@ The highest scenic score for a tree is
 [`r comma(max_scenic)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 9: Rope Bridge
+# Day 9
 
-[Instructions](https://adventofcode.com/2022/day/9)
-
+Rope Bridge
 
 ```{r}
 #| label: read-day9-part1
@@ -835,9 +833,9 @@ stars <- stars + 1
 The number of positions visited by the ninth knot is
 [`r comma(visited_b)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 10: Cathode-Ray Tube
+# Day 10
 
-[Instructions](https://adventofcode.com/2022/day/10)
+Cathode-Ray Tube
 
 ```{r}
 #| label: read-day10-part1
@@ -904,9 +902,11 @@ stars <- stars + 0
 #[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 ```
 
-# Day 11: Monkey in the Middle
+> Part 2 in progress
 
-[Instructions](https://adventofcode.com/2022/day/11)
+# Day 11
+
+Monkey in the Middle
 
 > In progress
 
@@ -962,13 +962,11 @@ x <- df_11 |>
   ) |> 
   ungroup()
 
-
-
 ```
 
-# Day 12: Hill Climbing Algorithm
+# Day 12
 
-[Instructions](https://adventofcode.com/2022/day/12)
+Hill Climbing Algorithm
 
 > In progress
 
@@ -1017,9 +1015,9 @@ df_12 |>
   
 ```  
 
-# Day 13: Distress Signal
+# Day 13
 
-[Instructions](https://adventofcode.com/2022/day/13)
+Distress Signal
 
 > In progress
 
@@ -1044,9 +1042,9 @@ df_13 <- tibble(lines = readLines('inputs/day13.csv')) |>
 
 ```
 
-# Day 14: Regolith Reservoir
+# Day 14
 
-[Instructions](https://adventofcode.com/2022/day/14)
+Regolith Reservoir
 
 > In progress
 
@@ -1197,10 +1195,11 @@ after_sand |>
 
 ```
 
-# Day 15: Beacon Exclusion Zone
+# Day 15
 
-[Instructions](https://adventofcode.com/2022/day/15)
+> In progress
 
+Beacon Exclusion Zone
 
 ```{r}
 #| label: read-day15
@@ -1331,10 +1330,11 @@ row_10_covered <- all_covered |>
   nrow()
 ```
 
-# Day 16: Proboscidea Volcanium
+# Day 16
 
-[Instructions](https://adventofcode.com/2022/day/16)
+Proboscidea Volcanium
 
+> In progress
 
 Looks like this is a network.
 
@@ -1391,13 +1391,17 @@ ggraph(df_16_graph) +
 The total number of [stars]{.aoc-yellow} earned is
 [`r stars`]{.aoc-green}.
 
+# Learnings
+
+> To do
+
 # Potential improvements
 
-- Read files straight from website rather than copying, but this won't work for the example data
 - Using a PAT for Github access from RStudio Cloud is painful
 - Circle back to improve after reviewing other peoples code.
 - Use the same Fira Code font for the charts
-- Put a border around the charts
+- Remove the warnings from the quarto run
+- Note the things I've learned
 
 # Source code
 
