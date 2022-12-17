@@ -10,6 +10,6 @@ key <- readr::read_csv('github.csv') |>
 
 gitcreds::gitcreds_set()
 
-usethis::git_sitrep()
+#usethis::git_sitrep()
 
 #-------------------------------------------------------------------------------

@@ -28,6 +28,8 @@ knitr:
 
 This analysis is my attempt at [adventofcode.com](https://adventofcode.com/) using R and Quarto.
 
+Answers will be for the sample data.
+
 Here's an overview from [adventofcode.com](https://adventofcode.com/).
 
 > Santa's reindeer typically eat regular reindeer food, but they need a lot of magical energy to deliver presents on Christmas. For that, their favorite snack is a special type of [star]{.aoc-yellow} fruit that only grows deep in the jungle. The Elves have brought you on their annual expedition to the grove where the fruit grows.
@@ -575,7 +577,6 @@ visible <- tibble(trees = raw_8) |>
   ungroup()
 
 
-
 visible |> 
   ggplot(aes(column, -row, fill =  tree, label = tree)) + 
   geom_tile() +
@@ -617,59 +618,101 @@ visible |>
 ```{r}
 #| label: read-day8-part2
 #| fig-height: 8
-#| eval: false
-#| include: false
 
-see_direction <- function(t) {
-  n <- length(t)
-  see <- accumulate(t, ~ c(.x, .y), .dir = 'backward')
-  ex_me <- map(1:n, ~see[[.x]][-1])
-  lower <- map(1:n, ~coalesce(sum(t[[.x]] > cummax(ex_me[[.x]]), 0)))
-  first_higher <- map(1:n, ~coalesce(max(t[[.x]] <= cummax(ex_me[[.x]]),0)))
-  unlist(map(1:n, ~lower[[.x]] + first_higher[[.x]]))
+# function for each direction ---------------------------------------------
+
+
+look_count <- function(df) {
+
+df |> 
+  filter(row_number() != 1) |> 
+  mutate(
+    cummax_tree = pmax(z, cummax(tree)),
+    taller = tree >= cummax_tree,
+    after_taller = coalesce(lag(cummax(taller)), 0)
+  ) |> 
+    
+  filter(! after_taller)  |> 
+  nrow()
+  
+}  
+
+# function to repeat ------------------------------------------------------
+
+look_directions <- function(x, y) {
+
+left <-  visible |> 
+  select(tree, row, column) |> 
+  mutate( z = sum((row == y & column == x) * tree)) |> 
+  filter(row == y) |> 
+  filter(column <= x) |> 
+  arrange(-column) |> 
+  look_count()
+
+right <-  visible |> 
+  select(tree, row, column) |> 
+  mutate( z = sum((row == y & column == x) * tree)) |> 
+  filter(row == y) |> 
+  filter(column >= x) |> 
+  look_count() 
+
+up <- visible |> 
+  select(tree, row, column) |> 
+  mutate( z = sum((row == y & column == x) * tree)) |> 
+  filter(column == x) |> 
+  filter(row <= y) |> 
+  arrange(-row) |> 
+  look_count()
+
+down <- visible |> 
+  select(tree, row, column) |> 
+  mutate( z = sum((row == y & column == x) * tree)) |> 
+  filter(column == x) |> 
+  filter(row >= y) |> 
+  look_count() 
+
+scenic_score <- left * right * up * down
+
 }
 
+# run for each tree -------------------------------------------------------
+
 scenic <- visible |> 
-  select(1:4) |> 
-  group_by(row) |> 
+  select(tree, row, column) |> 
   mutate(
-    see_up = see_direction(tree),
-    see_down = order_by(-column, see_direction(tree))
+    scenic_score = map2(column, row, look_directions)
   ) |> 
-  group_by(column) |> 
-  mutate(
-    see_right = see_direction(tree),
-    see_left = order_by(-row, see_direction(tree)),
-    scenic_score = see_up * see_down * see_right * see_left
-  ) |> 
-  ungroup()
+  unnest_longer(scenic_score) 
 
 
+# get maximum -------------------------------------------------------------
 
-highest_scenic <- scenic |> 
-  filter(scenic_score == max(scenic_score))
+max_scenic <- scenic |> 
+  filter(scenic_score == max(scenic_score)) |> 
+  slice(1) |> 
+  pull(scenic_score)
+
+# plot scenic scores ------------------------------------------------------
 
 scenic |> 
-  ggplot(aes(column, -row, fill = scenic_score, label = scenic_score)) + 
+  ggplot(aes(column, -row, fill = scenic_score, label = tree)) + 
   geom_tile() +
-  #geom_text(colour = aoc_black) +
-  scale_fill_gradient(high = aoc_dgreen, low = aoc_yellow) +
-  #coord_fixed() +
+  scale_fill_continuous(low = aoc_yellow, high = aoc_dgreen) +
   theme_aoc_null() +
   labs(
-    title = 'Scenic scores for trees'
+    title = 'Scenic score of trees'
   ) +
   guides(fill = 'none')
 
+# increment stars ---------------------------------------------------------
 
-stars <- stars + 0
+stars <- stars + 1
 
-#The highest scenic score for a tree is
-#[`r comma(max(highest_scenic$scenic_score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```
 
-> Part 2 still to come
+The highest scenic score for a tree is
+[`r comma(max_scenic)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 # Day 9: Rope Bridge
@@ -870,7 +913,7 @@ stars <- stars + 0
 ```{r}
 #| label: read-day11-part1
 
-df_11 <- tibble(lines = readLines('inputs/day11-eg.csv')) |> 
+df_11 <- tibble(lines = readLines('inputs/day11.csv')) |> 
   #separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |> 
   mutate(
     row = row_number(),
@@ -1297,7 +1340,6 @@ Looks like this is a network.
 
 ```{r}
 #| label: read-day16
-
 
 df_16 <- tibble(lines = readLines('inputs/day16.txt')) |> 
   separate(lines, sep = ';', into = c('valves', 'tunnel')) |> 
