@@ -74,11 +74,12 @@ stars <- 0
 
 # Day 1
 
-Calorie Counting
+Calorie Counting * *
 
 
 ```{r}
 #| label: read-day1-part1
+
 df1 <- tibble(cals = readLines('inputs/day1-part1.csv')) |>
   mutate(
     cals = as.numeric(cals),
@@ -96,6 +97,7 @@ df1 <- tibble(cals = readLines('inputs/day1-part1.csv')) |>
   arrange(-cals)
 
 stars <- stars + 1
+
 ```
 
 The maximum calories carried by an elf is
@@ -113,9 +115,9 @@ stars <- stars + 1
 ```
 
 The calories carried by the top three elves is
-[`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
+[`r` comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 2
+# Day 2 * *
 
 Rock Paper Scissors
 
@@ -187,7 +189,7 @@ The total points for the updated strategy are
 [`r comma(sum(df2_p2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 3
+# Day 3 * *
 
 Rucksack Reorganization
 
@@ -247,7 +249,7 @@ The total priority for the badges is
 [`r comma(sum(df3_2$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 4
+# Day 4 * *
 
 Camp Cleanup
 
@@ -288,7 +290,7 @@ The assignment pairs where they overlap is
 [`r comma(nrow(df4_2))`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 5
+# Day 5 * *
 
 Supply Stacks
 
@@ -379,7 +381,7 @@ With the new crane the crates on the top of each stack are
 [`r message2`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 6
+# Day 6 * *
 
 Tuning Trouble
 
@@ -440,7 +442,7 @@ The start of message marker is at
 [`r comma(som)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 7
+# Day 7 * *
 
 No Space Left On Device
 
@@ -525,7 +527,7 @@ stars <- stars + 1
 The best folder to delete has a size of
 [`r comma(dir_size)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 8
+# Day 8 * *
 
 Treetop Tree House
 
@@ -714,7 +716,7 @@ The highest scenic score for a tree is
 [`r comma(max_scenic)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
-# Day 9
+# Day 9 * *
 
 Rope Bridge
 
@@ -833,7 +835,7 @@ stars <- stars + 1
 The number of positions visited by the ninth knot is
 [`r comma(visited_b)`]{.aoc-green}. [*]{.aoc-yellow}
 
-# Day 10
+# Day 10 *
 
 Cathode-Ray Tube
 
@@ -1394,6 +1396,8 @@ The total number of [stars]{.aoc-yellow} earned is
 # Learnings
 
 > To do
+
+- Tried to include an r script with chunk option `code` or `file` but didn't have any luck
 
 # Potential improvements
 
