@@ -125,6 +125,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#day-14" id="toc-day-14" class="nav-link" data-scroll-target="#day-14">Day 14</a></li>
   <li><a href="#day-15" id="toc-day-15" class="nav-link" data-scroll-target="#day-15">Day 15</a></li>
   <li><a href="#day-16" id="toc-day-16" class="nav-link" data-scroll-target="#day-16">Day 16</a></li>
+  <li><a href="#day-18" id="toc-day-18" class="nav-link" data-scroll-target="#day-18">Day 18:</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#learnings" id="toc-learnings" class="nav-link" data-scroll-target="#learnings">Learnings</a></li>
   <li><a href="#potential-improvements" id="toc-potential-improvements" class="nav-link" data-scroll-target="#potential-improvements">Potential improvements</a></li>
@@ -1261,9 +1262,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </section>
+<section id="day-18" class="level1">
+<h1>Day 18:</h1>
+<p>Boiling Boulders</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_18 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day18-full.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">','</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>xy <span class="ot">&lt;-</span> df_18 <span class="sc">|&gt;</span> </span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">inner_join</span>(df_18, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'y'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">filter</span>(<span class="fu">abs</span>(z.x <span class="sc">-</span> z.y) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>xz <span class="ot">&lt;-</span> df_18 <span class="sc">|&gt;</span> </span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(df_18, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'x'</span>, <span class="st">'z'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(y.x <span class="sc">-</span> y.y) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>yz <span class="ot">&lt;-</span> df_18 <span class="sc">|&gt;</span> </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">inner_join</span>(df_18, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">'y'</span>, <span class="st">'z'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(x.x <span class="sc">-</span> x.y) <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a>surface <span class="ot">&lt;-</span> (<span class="fu">nrow</span>(df_18) <span class="sc">*</span> <span class="dv">6</span>) <span class="sc">-</span> <span class="fu">nrow</span>(xy) <span class="sc">-</span> <span class="fu">nrow</span>(xz) <span class="sc">-</span> <span class="fu">nrow</span>(yz)</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The surface area is <span class="aoc-green">4,608</span>. <span class="aoc-yellow">*</span> ```</p>
+<blockquote class="blockquote">
+<p>Part 2 in progress</p>
+</blockquote>
+</section>
 <section id="total-stars" class="level1">
 <h1>Total stars</h1>
-<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">19</span>.</p>
+<p>The total number of <span class="aoc-yellow">stars</span> earned is <span class="aoc-green">20</span>.</p>
 </section>
 <section id="learnings" class="level1">
 <h1>Learnings</h1>
