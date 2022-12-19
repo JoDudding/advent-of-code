@@ -1388,11 +1388,29 @@ ggraph(df_16_graph) +
 
 ```  
 
+# Day 17
+
+Pyroclastic Flow
+
+> In progress
+
+Looks like Tetris.
+
+```{r}
+#| label: read-day17
+
+df_17_shapes <- tibble(lines = readLines('inputs/day17.txt'))
+
+df_17_wind <- '>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>'
+
+```
+
 # Day 18 *
 
 Boiling Boulders
 
 ```{r}
+#| label: read-day18
 
 df_18 <- tibble(lines = readLines('inputs/day18.txt')) |> 
   separate(lines, sep = ',', into = c('x', 'y', 'z'), convert = TRUE) 
@@ -1425,9 +1443,76 @@ stars <- stars + 1
 
 The surface area is
 [`r comma(surface)`]{.aoc-green}. [*]{.aoc-yellow}
-```
 
 > Part 2 in progress
+
+
+```{r}
+#| label: day18-part2
+
+inner <- crossing(
+  x = (min(df_18$x) + 1):(max(df_18$x) - 1),
+  y = (min(df_18$y) + 1):(max(df_18$y) - 1),
+  z = (min(df_18$z) + 1):(max(df_18$z) - 1)
+) |>
+  anti_join(df_18, by = c('x', 'y', 'z'))
+
+# need to check if there is a tunnel to these inner spots
+
+
+```
+
+# Day 19
+
+Not Enough Minerals
+
+> In progress
+
+```{r}
+#| label: read-day19
+
+minutes <- 24
+
+df_19 <- tibble(lines = readLines('inputs/day19.txt')) |> 
+  separate(lines, sep = ': ', into = c('blueprint', 'details')) |> 
+  separate(
+    details, 
+    sep = '\\. ', 
+    into = c('ore', 'clay', 'obsidian', 'geode')
+  ) |>
+  gather(-blueprint, key = 'robot', value = 'cost') |> 
+  mutate(
+    cost = str_sub(cost, str_length(robot) + 19) |> 
+      str_remove('\\.') |> 
+      str_split(' and ')
+  ) |> 
+  unnest_longer(cost) |> 
+  separate(cost, sep = ' ', into = c('cost_num', 'cost_type'), convert = TRUE) |> 
+  mutate(
+    robot = factor(robot, levels = c('ore', 'clay', 'obsidian', 'geode')),
+    cost_type = factor(cost_type, levels = c('ore', 'clay', 'obsidian', 'geode'))) |> 
+  arrange(blueprint, robot, cost_type) |> 
+  spread(key = cost_type, value = cost_num, fill = 0) 
+
+b <- unique(df_19$blueprint)[1]
+
+bank_type <- list(
+  ore = 0,
+  clay = 0,
+  obsidian = 0,
+  geode = 0)
+
+bank_robot <- list(
+  ore_robot = 1,
+  clay_robot = 0,
+  obsidian_robot = 0
+)
+
+spend_collect <- function(b) {
+  
+}
+
+```
 
 
 # Total stars
