@@ -1388,14 +1388,22 @@ ggraph(df_16_graph) +
 
 ```  
 
-# Day 18: 
+# Day 18 *
 
 Boiling Boulders
 
 ```{r}
 
-df_18 <- tibble(lines = readLines('inputs/day18-full.txt')) |> 
+df_18 <- tibble(lines = readLines('inputs/day18.txt')) |> 
   separate(lines, sep = ',', into = c('x', 'y', 'z'), convert = TRUE) 
+
+df_18 |>
+  ggplot(aes(x, y)) +
+  geom_tile(fill = aoc_dgreen) +
+  facet_wrap(~z) +
+  labs(
+    title = 'Cross section slices (Z)'
+  )
 
 
 xy <- df_18 |> 
