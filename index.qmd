@@ -1249,8 +1249,20 @@ Was working on test data but vectors were too big for actual data. Rewriting und
 #| echo: false
 #| include: false
 
-#row_of_interest <- 10
-row_of_interest <- 2000000
+row_of_interest <- if(nrow(df_15) == 14) {10} else {2000000}
+
+df_of_interest <- df_15 |> 
+  filter(
+    abs(sensor_y - row_of_interest) > manhattan
+  ) |> 
+  mutate(
+    roi_x_minus = manhattan - abs(sensor_y - row_of_interest) - sensor_x,
+    roi_x_plus = manhattan - abs(sensor_y - row_of_interest) + sensor_x,
+    roi_length = abs(roi_x_minus - roi_x_plus),
+    roi_range = map2(roi_x_minus, roi_x_plus, seq)
+  ) |> 
+  arrange(-roi_length)
+
 
 combine_vecs <- function(s) {
   unique(unlist(s))
@@ -1330,6 +1342,13 @@ all_covered <- map_dfr(df_15$pair, get_covered) |>
 row_10_covered <- all_covered |> 
   filter(y == row_of_interest) |> 
   nrow()
+
+row_10_covered
+
+# 4687825 is too low
+
+
+
 ```
 
 # Day 16
@@ -1513,6 +1532,177 @@ spend_collect <- function(b) {
 }
 
 ```
+
+
+# Day 20
+
+Grove Positioning System
+
+> In progress
+
+```{r}
+#| label: read-day20
+
+df_20 <- tibble(lines = readLines('inputs/day20.txt')) |> 
+  transmute(
+    move = as.numeric(lines),
+    orig_order = row_number() - 1,
+    current_order = orig_order
+  )
+
+last_index <- nrow(df_20)
+loop <- 1:(last_index)
+
+zeroth <- df_20 |> 
+  filter(move == 0) |> 
+  pull(orig_order)
+
+
+#' To mix the file, move each number forward or backward in the file a number of 
+#' positions equal to the value of the number being moved. The list is circular, 
+#' so moving a number off one end of the list wraps back around to the other end 
+#' as if the ends were connected.
+
+make_change <- function(l) {
+  
+l_move <<- df_20 |> 
+  filter(orig_order == l - 1) |> 
+  pull(move)
+  
+after_loop <<- after_loop |>
+    mutate(
+      old_order = current_order,
+      move_position = sum((orig_order == (l - 1)) * current_order),
+      move_to = case_when(
+        move_position + l_move <= 0 ~ ((move_position + l_move - 1) %% last_index),
+        move_position + l_move > last_index ~ ((move_position + l_move + 1) %% last_index),
+        TRUE ~ move_position + l_move
+      ),
+      current_order = case_when(
+        current_order == move_position ~ move_to,
+        move_to <= move_position & 
+          current_order >= move_to & 
+          current_order <= move_position ~
+          (current_order + 1)  %% last_index,
+        move_to >= move_position  & 
+          current_order >= move_position & 
+          current_order <= move_to ~
+          (current_order - 1)  %% last_index,
+        TRUE ~ current_order
+      )
+    )
+
+}
+
+after_loop <- df_20
+walk(loop, make_change)
+paste(after_loop$move, collapse = ', ')
+
+values_wanted <- c(0, 1000, 2000, 3000) %% last_index
+
+resort_zero <- after_loop |> 
+  mutate(
+    zero_position = sum((orig_order == zeroth) * current_order),
+    final_position = (current_order - zero_position) %% last_index
+  ) 
+
+df_20_sum <- resort_zero |> 
+  filter(final_position %in% values_wanted) |> 
+  summarise(final = sum(move)) |> 
+  pull(final)
+
+df_20_sum
+
+# 589 is too low
+# 3082 is too low
+# -2515 is too low
+
+```
+
+# Day 21 *
+
+Monkey Math
+
+```{r}
+#| label: read-day21
+
+df_21 <- tibble(lines = readLines('inputs/day21.txt')) |> 
+  separate(lines, into = c('monkey', 'equation'), sep = ': ') |> 
+  mutate(
+    type = case_when(
+      str_count(equation, '\\s') == 0 ~ 'Number',
+      TRUE ~ 'Monkeys'
+    )
+  ) |> 
+  arrange(type)
+
+monkey_numbers <- df_21 |> 
+  filter(type == 'Number') |> 
+  transmute(monkey_name = monkey, number = parse_number(equation))
+
+still_equation <- df_21 |> 
+  filter(type == 'Monkeys') |> 
+  separate(equation, sep = '\\s', into = c('monkey_1', 'equation', 'monkey_2')) |> 
+  gather(
+    c(monkey_1, monkey_2),
+    key = order_monkey,
+    value = monkey_name
+  ) |> 
+  arrange(monkey, order_monkey) |> 
+  mutate(number_last = as.double(NA))
+
+
+# start while loop
+while(nrow(still_equation) > 0) {
+
+# see if all child monkeys have been replaced by a number
+  
+working <- still_equation |> 
+  left_join(monkey_numbers, by = 'monkey_name') |> 
+  group_by(monkey) |> 
+  mutate(
+    number = coalesce(number, number_last),
+    fully = sum(is.na(number)) == 0
+  ) |> 
+  ungroup()
+
+# add the newly calculated monkey numbers back
+monkey_numbers <- working |> 
+  filter(fully) |> 
+  group_by(monkey)  |> 
+  mutate(
+    tot_number = case_when(
+      equation == '+' ~ first(number) + last(number),
+      equation == '-' ~ first(number) - last(number),
+      equation == '*' ~ first(number) * last(number),
+      equation == '/' ~ first(number) / last(number)
+    )
+  ) |> 
+  ungroup() |> 
+  distinct(monkey_name  = monkey, number = tot_number) |> 
+  bind_rows(monkey_numbers)
+
+# remove these monkeys from the list
+still_equation <- working |> 
+  filter(!fully) |> 
+  mutate(number_last = number) |> 
+  select(-number)
+
+# end while
+}
+
+# find the number for the root monkey
+root_number <- monkey_numbers |> 
+  filter(monkey_name == 'root') |> 
+  pull(number)
+
+stars <- stars + 1
+
+```
+
+
+The number called by monkey root is
+[`r` comma(root_number)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 # Total stars
