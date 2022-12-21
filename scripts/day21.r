@@ -78,6 +78,11 @@ stars <- stars + 1
 
 #-------------------------------------------------------------------------------
 #' part 2
+#' need to stop for now
+#' for monkeys with numbers flag how many loops were required
+#' loop one less step
+#' flag for whether humn has been used in the path
+#' looks like its only referenced once
 #-------------------------------------------------------------------------------
 
 

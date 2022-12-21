@@ -72,9 +72,9 @@ stars <- 0
 
 ```
 
-# Day 1
+# Day 1 * *
 
-Calorie Counting * *
+Calorie Counting
 
 
 ```{r}
@@ -115,7 +115,7 @@ stars <- stars + 1
 ```
 
 The calories carried by the top three elves is
-[`r` comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
+[`r comma(top_3_cals)`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Day 2 * *
 
@@ -1702,7 +1702,7 @@ stars <- stars + 1
 
 
 The number called by monkey root is
-[`r` comma(root_number)`]{.aoc-green}. [*]{.aoc-yellow}
+{`r comma(root_number)`]{.aoc-green}. [*]{.aoc-yellow}
 
 
 # Total stars
