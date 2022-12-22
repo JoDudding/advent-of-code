@@ -9,7 +9,7 @@ format:
     #standalone: true
     fig-width: 8
     fig-height: 4
-    theme: ['advent-of-code.scss']
+    theme: ['branding/advent-of-code.scss']
     highlight-style: nord
     toc: true
     toc_float: 
@@ -66,7 +66,7 @@ options(
   tidyverse.quiet = TRUE
 )
 
-source('aoc-theme.r')
+source('branding/aoc-theme.r')
 
 stars <- 0
 
@@ -76,11 +76,10 @@ stars <- 0
 
 Calorie Counting
 
-
 ```{r}
-#| label: read-day1-part1
+#| label: read-day1
 
-df1 <- tibble(cals = readLines('inputs/day1-part1.csv')) |>
+df1 <- tibble(cals = readLines('inputs/day1.txt')) |>
   mutate(
     cals = as.numeric(cals),
     row = row_number(),
@@ -104,7 +103,7 @@ The maximum calories carried by an elf is
 [`r comma(max(df1$cals))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day1-part2
+#| label: day1-part2
 
 top_3_cals <- df1 |>
   head(3) |>
@@ -122,8 +121,8 @@ The calories carried by the top three elves is
 Rock Paper Scissors
 
 ```{r}
-#| label: read-day2-part1
-df2 <- tibble(strat = readLines('inputs/day2-part1.csv')) |>
+#| label: read-day2
+df2 <- tibble(strat = readLines('inputs/day2.txt')) |>
   separate(strat, into = c('them', 'us')) |>
   mutate(
     shape = case_when(
@@ -153,7 +152,7 @@ The total points for this strategy are
 [`r comma(sum(df2$score))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day2-part2
+#| label: day2-part2
 
 df2_p2 <- df2 |>
   mutate(
@@ -194,14 +193,14 @@ The total points for the updated strategy are
 Rucksack Reorganization
 
 ```{r}
-#| label: read-day3-part1
+#| label: read-day3
 
 scoring3 <- tibble(
   contents_item = c(letters, LETTERS),
   priority = 1:52
 )
 
-df3 <- tibble(contents = readLines('inputs/day3-part1.csv')) |>
+df3 <- tibble(contents = readLines('inputs/day3.txt')) |>
   mutate(
     rucksack = row_number(),
     len = str_length(contents),
@@ -229,7 +228,7 @@ The total priority for the rucksacks is
 [`r comma(sum(df3_1$priority))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day3-part2
+#| label: day3-part2
 
 df3_2 <- df3 |>
   mutate(
@@ -254,9 +253,9 @@ The total priority for the badges is
 Camp Cleanup
 
 ```{r}
-#| label: read-day4-part1
+#| label: read-day4
 
-df4 <- tibble(sections = readLines('inputs/day4-part1.csv')) |> 
+df4 <- tibble(sections = readLines('inputs/day4.txt')) |> 
   separate(sections, into = c('elf1_min', 'elf1_max', 'elf2_min', 'elf2_max'), convert = TRUE) |> 
   mutate(pair = row_number())
 
@@ -274,7 +273,7 @@ The assignment pairs where one fully contains the other is
 [`r comma(nrow(df4_1))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day4-part2
+#| label: day4-part2
 
 
 df4_2 <- df4 |> 
@@ -295,9 +294,9 @@ The assignment pairs where they overlap is
 Supply Stacks
 
 ```{r}
-#| label: read-day5-part1
+#| label: read-day5
 
-df5 <- readLines('inputs/day5-part1.csv')
+df5 <- readLines('inputs/day5.txt')
 
 movements <- tibble(crates = df5) |> 
   filter(cumsum(str_trim(crates) == '') > 0 & str_trim(crates) != '') |> 
@@ -312,14 +311,6 @@ stack_seq <- seq(2, stack_nums * 4, by = 4)
 stack_list <- map(stack_seq, ~rev(str_sub(stack, .x, .x)))
 #names(stack_list) = paste0('stack_', 1:stack_nums)
 adj_stack <- map(stack_list, ~ .x[str_trim(.x) != ''])
-
-
-#' need to do
-#' get the last item in the from list
-#' add it to the end of the to list
-#' update the from list to remove it
-#' repeat for the number of moves
-
 
 move <- function(stack_from, stack_to) {
   start_stack <- adj_stack[[stack_from]]
@@ -352,7 +343,7 @@ The crates on the top of each stack are
 
 
 ```{r}
-#| label: read-day5-part2
+#| label: day5-part2
 
 adj_stack <- map(stack_list, ~ .x[str_trim(.x) != ''])
 
@@ -386,9 +377,9 @@ With the new crane the crates on the top of each stack are
 Tuning Trouble
 
 ```{r}
-#| label: read-day6-part1
+#| label: read-day6
 
-raw_6 <- readLines('inputs/day6-part1.csv')
+raw_6 <- readLines('inputs/day6.txt')
 
 df_6 <- tibble(chars = str_split(raw_6, pattern = '')) |>  
   unnest(chars) |> 
@@ -416,7 +407,7 @@ The start of packet marker is at
 [`r comma(sop)`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day6-part2
+#| label: day6-part2
 
 chars <- unlist(str_split(raw_6, pattern = ''))
 
@@ -447,7 +438,7 @@ The start of message marker is at
 No Space Left On Device
 
 ```{r}
-#| label: read-day7-part1
+#| label: read-day7
 
 pth <- function(path, cd) {
   if (!is.na(cd)) {
@@ -459,7 +450,7 @@ pth <- function(path, cd) {
   return(path)
 }
 
-df_7 <- tibble(instruct = readLines('inputs/day7-part1.csv')) |> 
+df_7 <- tibble(instruct = readLines('inputs/day7.txt')) |> 
   mutate(
     row = row_number(),
     command = case_when(
@@ -508,7 +499,7 @@ The total directory size is
 
 
 ```{r}
-#| label: read-day7-part2
+#| label: day7-part2
 
 tot_space <- 70000000
 unused_space <- tot_space - max(df_7$file_size)
@@ -532,10 +523,10 @@ The best folder to delete has a size of
 Treetop Tree House
 
 ```{r}
-#| label: read-day8-part1
+#| label: read-day8
 #| fig-height: 8
 
-raw_8 <- readLines('inputs/day8-part1.csv')
+raw_8 <- readLines('inputs/day8.txt')
 
 visible <- tibble(trees = raw_8) |> 
   mutate(
@@ -599,7 +590,7 @@ The total number of visible trees is
 [`r comma(sum(visible$visible))`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day8-part1-chart
+#| label: day8-chart
 #| fig-height: 8
 
 visible |> 
@@ -617,7 +608,7 @@ visible |>
 ```
 
 ```{r}
-#| label: read-day8-part2
+#| label: day8-part2
 #| fig-height: 8
 
 # function for each direction ---------------------------------------------
@@ -721,9 +712,9 @@ The highest scenic score for a tree is
 Rope Bridge
 
 ```{r}
-#| label: read-day9-part1
+#| label: read-day9
 
-df_9 <- tibble(lines = readLines('inputs/day9-part1.csv')) |> 
+df_9 <- tibble(lines = readLines('inputs/day9.txt')) |> 
   separate(lines, into = c('direction', 'moves'), convert = TRUE) |> 
   uncount(moves) |> 
   mutate(
@@ -798,7 +789,7 @@ The number of positions visited is
 
 
 ```{r}
-#| label: read-day9-part1b
+#| label: day9-part2
 
 
 df_9b <- df_9 |> 
@@ -840,9 +831,9 @@ The number of positions visited by the ninth knot is
 Cathode-Ray Tube
 
 ```{r}
-#| label: read-day10-part1
+#| label: read-day10
 
-df_10 <- tibble(lines = readLines('inputs/day10.csv')) |> 
+df_10 <- tibble(lines = readLines('inputs/day10.txt')) |> 
   separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |> 
   mutate(row = row_number()) |> 
   mutate(
@@ -864,14 +855,13 @@ combined_ss <- df_10 |>
 
 stars <- stars + 1
 
-
 ```
 
 The combined signal strength is
 [`r comma(combined_ss)`]{.aoc-green}. [*]{.aoc-yellow}
 
 ```{r}
-#| label: read-day10-part2
+#| label: day10-part2
 #| eval: false
 #| include: false
 
@@ -899,9 +889,6 @@ df_10 |>
 
 stars <- stars + 0
 
-
-#The ... is
-#[`r 999`]{.aoc-green}. [*]{.aoc-yellow}
 ```
 
 > Part 2 in progress
@@ -913,10 +900,10 @@ Monkey in the Middle
 > In progress
 
 ```{r}
-#| label: read-day11-part1
+#| label: read-day11
 
-df_11 <- tibble(lines = readLines('inputs/day11.csv')) |> 
-  #separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |> 
+df_11 <- tibble(lines = readLines('inputs/day11.txt')) |> 
+  filter(lines != '') |> 
   mutate(
     row = row_number(),
     from_monkey = case_when(
@@ -1923,6 +1910,17 @@ humn <- eval(parse(text = calc_string))
 
 The number monkey humn calls out is
 [`r comma(humn)`]{.aoc-green}. [*]{.aoc-yellow}
+
+# Day 22
+
+xx
+
+```{r}
+#| label: read-day22
+
+
+
+```
 
 
 # Total stars

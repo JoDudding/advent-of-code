@@ -130,6 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#day-19" id="toc-day-19" class="nav-link" data-scroll-target="#day-19">Day 19</a></li>
   <li><a href="#day-20" id="toc-day-20" class="nav-link" data-scroll-target="#day-20">Day 20</a></li>
   <li><a href="#day-21" id="toc-day-21" class="nav-link" data-scroll-target="#day-21">Day 21 * *</a></li>
+  <li><a href="#day-22" id="toc-day-22" class="nav-link" data-scroll-target="#day-22">Day 22</a></li>
   <li><a href="#total-stars" id="toc-total-stars" class="nav-link" data-scroll-target="#total-stars">Total stars</a></li>
   <li><a href="#learnings" id="toc-learnings" class="nav-link" data-scroll-target="#learnings">Learnings</a></li>
   <li><a href="#potential-improvements" id="toc-potential-improvements" class="nav-link" data-scroll-target="#potential-improvements">Potential improvements</a></li>
@@ -193,7 +194,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">tidyverse.quiet =</span> <span class="cn">TRUE</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'aoc-theme.r'</span>)</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">'branding/aoc-theme.r'</span>)</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
@@ -205,7 +206,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">cals =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day1-part1.csv'</span>)) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">cals =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day1.txt'</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">cals =</span> <span class="fu">as.numeric</span>(cals),</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
@@ -244,7 +245,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">strat =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day2-part1.csv'</span>)) <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">strat =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day2.txt'</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(strat, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'them'</span>, <span class="st">'us'</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="fu">case_when</span>(</span>
@@ -316,7 +317,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">priority =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">52</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">contents =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day3-part1.csv'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>df3 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">contents =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day3.txt'</span>)) <span class="sc">|&gt;</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">rucksack =</span> <span class="fu">row_number</span>(),</span>
 <span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">len =</span> <span class="fu">str_length</span>(contents),</span>
@@ -365,7 +366,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">sections =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day4-part1.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df4 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">sections =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day4.txt'</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(sections, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'elf1_min'</span>, <span class="st">'elf1_max'</span>, <span class="st">'elf2_min'</span>, <span class="st">'elf2_max'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pair =</span> <span class="fu">row_number</span>())</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -399,7 +400,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day5-part1.csv'</span>)</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>df5 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day5.txt'</span>)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>movements <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">crates =</span> df5) <span class="sc">|&gt;</span> </span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">cumsum</span>(<span class="fu">str_trim</span>(crates) <span class="sc">==</span> <span class="st">''</span>) <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> <span class="fu">str_trim</span>(crates) <span class="sc">!=</span> <span class="st">''</span>) <span class="sc">|&gt;</span> </span>
@@ -415,37 +416,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">#names(stack_list) = paste0('stack_', 1:stack_nums)</span></span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>adj_stack <span class="ot">&lt;-</span> <span class="fu">map</span>(stack_list, <span class="sc">~</span> .x[<span class="fu">str_trim</span>(.x) <span class="sc">!=</span> <span class="st">''</span>])</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#' need to do</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#' get the last item in the from list</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="co">#' add it to the end of the to list</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="co">#' update the from list to remove it</span></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a><span class="co">#' repeat for the number of moves</span></span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>move <span class="ot">&lt;-</span> <span class="cf">function</span>(stack_from, stack_to) {</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  start_stack <span class="ot">&lt;-</span> adj_stack[[stack_from]]</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  end_stack <span class="ot">&lt;-</span> adj_stack[[stack_to]]</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  to_move <span class="ot">&lt;-</span> <span class="fu">tail</span>(start_stack, <span class="dv">1</span>)</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  adj_stack[[stack_to]] <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(end_stack, to_move)</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  adj_stack[[stack_from]] <span class="ot">&lt;&lt;-</span> start_stack[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(start_stack)<span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>move <span class="ot">&lt;-</span> <span class="cf">function</span>(stack_from, stack_to) {</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  start_stack <span class="ot">&lt;-</span> adj_stack[[stack_from]]</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  end_stack <span class="ot">&lt;-</span> adj_stack[[stack_to]]</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  to_move <span class="ot">&lt;-</span> <span class="fu">tail</span>(start_stack, <span class="dv">1</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  adj_stack[[stack_to]] <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(end_stack, to_move)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  adj_stack[[stack_from]] <span class="ot">&lt;&lt;-</span> start_stack[<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(start_stack)<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>move_times <span class="ot">&lt;-</span> <span class="cf">function</span>(move_num, stack_from, stack_to) {</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>move_num) {<span class="fu">move</span>(stack_from, stack_to)}</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="fu">pwalk</span>(movements, move_times)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>move_times <span class="ot">&lt;-</span> <span class="cf">function</span>(move_num, stack_from, stack_to) {</span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>move_num) {<span class="fu">move</span>(stack_from, stack_to)}</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>final_stack <span class="ot">&lt;-</span> adj_stack</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">map</span>(final_stack, <span class="sc">~</span><span class="fu">tail</span>(.x, <span class="dv">1</span>)), <span class="at">collapse =</span> <span class="st">''</span>)</span>
 <span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="fu">pwalk</span>(movements, move_times)</span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>final_stack <span class="ot">&lt;-</span> adj_stack</span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>message <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">map</span>(final_stack, <span class="sc">~</span><span class="fu">tail</span>(.x, <span class="dv">1</span>)), <span class="at">collapse =</span> <span class="st">''</span>)</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>stars <span class="ot">&lt;-</span> stars <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>The crates on the top of each stack are <span class="aoc-green">CMZ</span>. <span class="aoc-yellow">*</span></p>
@@ -483,7 +476,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>raw_6 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day6-part1.csv'</span>)</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>raw_6 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day6.txt'</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df_6 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">chars =</span> <span class="fu">str_split</span>(raw_6, <span class="at">pattern =</span> <span class="st">''</span>)) <span class="sc">|&gt;</span>  </span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(chars) <span class="sc">|&gt;</span> </span>
@@ -548,7 +541,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(path)</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>df_7 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">instruct =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day7-part1.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>df_7 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">instruct =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day7.txt'</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
 <span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">command =</span> <span class="fu">case_when</span>(</span>
@@ -617,7 +610,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>raw_8 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day8-part1.csv'</span>)</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>raw_8 <span class="ot">&lt;-</span> <span class="fu">readLines</span>(<span class="st">'inputs/day8.txt'</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>visible <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">trees =</span> raw_8) <span class="sc">|&gt;</span> </span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -674,7 +667,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/read-day8-part1-1.png" class="img-fluid" width="768"></p>
+<p><img src="index_files/figure-html/read-day8-1.png" class="img-fluid" width="768"></p>
 </div>
 <details>
 <summary>Code</summary>
@@ -698,7 +691,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/read-day8-part1-chart-1.png" class="img-fluid" width="768"></p>
+<p><img src="index_files/figure-html/day8-chart-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <div class="cell">
@@ -790,7 +783,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-84"><a href="#cb19-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">'none'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/read-day8-part2-1.png" class="img-fluid" width="768"></p>
+<p><img src="index_files/figure-html/day8-part2-1.png" class="img-fluid" width="768"></p>
 </div>
 <details>
 <summary>Code</summary>
@@ -807,7 +800,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_9 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day9-part1.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_9 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day9.txt'</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'direction'</span>, <span class="st">'moves'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">uncount</span>(moves) <span class="sc">|&gt;</span> </span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -876,7 +869,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/read-day9-part1-1.png" class="img-fluid" width="768"></p>
+<p><img src="index_files/figure-html/read-day9-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 <p>The number of positions visited is <span class="aoc-green">88</span>. <span class="aoc-yellow">*</span></p>
@@ -921,7 +914,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_10 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day10.csv'</span>)) <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>df_10 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day10.txt'</span>)) <span class="sc">|&gt;</span> </span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(lines, <span class="at">sep =</span> <span class="st">' '</span>, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">'instruction'</span>, <span class="st">'moves'</span>), <span class="at">convert =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span> </span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
@@ -958,8 +951,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_11 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day11.csv'</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#separate(lines, sep = ' ', into = c('instruction', 'moves'), convert = TRUE) |&gt; </span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>df_11 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">lines =</span> <span class="fu">readLines</span>(<span class="st">'inputs/day11.txt'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(lines <span class="sc">!=</span> <span class="st">''</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">row =</span> <span class="fu">row_number</span>(),</span>
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">from_monkey =</span> <span class="fu">case_when</span>(</span>
@@ -1781,6 +1774,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 <p>The number monkey humn calls out is <span class="aoc-green">301</span>. <span class="aoc-yellow">*</span></p>
+</section>
+<section id="day-22" class="level1">
+<h1>Day 22</h1>
+<p>xx</p>
+<div class="cell">
+
+</div>
 </section>
 <section id="total-stars" class="level1">
 <h1>Total stars</h1>
