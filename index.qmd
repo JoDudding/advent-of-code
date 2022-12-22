@@ -1520,7 +1520,6 @@ spend_collect <- function(b) {
 
 ```
 
-
 # Day 20
 
 Grove Positioning System
@@ -1529,6 +1528,7 @@ Grove Positioning System
 
 ```{r}
 #| label: read-day20
+#| include: false
 
 df_20 <- tibble(lines = readLines('inputs/day20.txt')) |> 
   transmute(
@@ -1583,7 +1583,7 @@ after_loop <<- after_loop |>
 
 after_loop <- df_20
 walk(loop, make_change)
-paste(after_loop$move, collapse = ', ')
+#paste(after_loop$move, collapse = ', ')
 
 values_wanted <- c(0, 1000, 2000, 3000) %% last_index
 
@@ -1598,7 +1598,7 @@ df_20_sum <- resort_zero |>
   summarise(final = sum(move)) |> 
   pull(final)
 
-df_20_sum
+#df_20_sum
 
 # 589 is too low
 # 3082 is too low
@@ -1913,10 +1913,71 @@ The number monkey humn calls out is
 
 # Day 22
 
-xx
+Monkey Map
 
 ```{r}
 #| label: read-day22
+
+df_22 <- tibble(lines = readLines('inputs/day22.txt'))
+
+
+# board dimensions --------------------------------------------------------
+
+map_22 <- df_22 |> 
+  mutate(
+    row = row_number()
+  ) |> 
+  filter(row < n() - 1) |> 
+  mutate(
+    board = str_split(lines, pattern = '')
+  ) |> 
+  unnest_longer(board) |> 
+  group_by(row) |> 
+  mutate(col = row_number()) |> 
+  ungroup() |> 
+  filter(board != ' ') |> 
+  select(-lines) |> 
+  print()
+
+# plot board --------------------------------------------------------------
+
+map_22 |> 
+  ggplot(aes(x = col, y = row, label = board)) +
+  geom_text() +
+  scale_y_reverse() +
+  labs(
+    x = NULL, y = NULL,
+    title = 'Monkey map'
+  ) +
+  theme_aoc_null() +
+  coord_fixed()
+
+# get path directions -----------------------------------------------------
+
+path <- df_22 |> 
+  filter(row_number() == n()) |>
+  mutate(
+    nums = str_split(lines, pattern = 'R|L'),
+    direction = str_split(lines, pattern = '[:digit:]+'),
+    direction = map(direction, ~head(.x, -1)),
+  ) |> 
+  unnest_longer(c(direction, nums)) |> 
+  mutate(turn = row_number()) |> 
+  select(-lines) |> 
+  print()
+
+
+# starting ----------------------------------------------------------------
+
+current_coords <- map_22 |> 
+  filter(row == 1) |> 
+  filter(col == min(col)) |> 
+  select(row, col) |> 
+  as.list()
+
+current_dir <- 'e'
+
+markers <- c('n' = '^', 'e' = '>', 'w' = '<', 's' = 'v')
 
 
 
