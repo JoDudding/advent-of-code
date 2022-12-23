@@ -2,11 +2,11 @@
 #' day 20 Grove Positioning System
 #-------------------------------------------------------------------------------
 
-df_20 <- tibble(lines = readLines('inputs/day20-full.txt')) |> 
+df_20 <- tibble(lines = readLines('inputs/day20.txt')) |> 
   transmute(
     move = as.numeric(lines),
-    orig_order = row_number() - 1,
-    current_order = orig_order
+    orig_order = as.double(row_number()),
+    current_order = as.double(orig_order)
   )
 
 last_index <- nrow(df_20)
@@ -17,49 +17,91 @@ zeroth <- df_20 |>
   pull(orig_order)
 
 
-#' To mix the file, move each number forward or backward in the file a number of 
-#' positions equal to the value of the number being moved. The list is circular, 
-#' so moving a number off one end of the list wraps back around to the other end 
-#' as if the ends were connected.
+# wrap modulus function ---------------------------------------------------
+
+
+mod_shift <- function(num, base) {
+  ((num - 1) %% base) + 1
+}
+
+
+# loop function -----------------------------------------------------------
+
 
 make_change <- function(l) {
   
 l_move <<- df_20 |> 
-  filter(orig_order == l - 1) |> 
+  filter(orig_order == l) |> 
   pull(move)
-  
+
+from_position <<- after_loop |>
+  filter(orig_order == l) |> 
+  pull(current_order)
+
+raw_shift <- if((from_position + l_move) > last_index) {
+  from_position + l_move + 1
+} else if( l_move > 0 & (from_position + l_move) > 0) {
+  from_position + l_move
+} else {
+  from_position + l_move - 1
+}
+
+to_position <- mod_shift(raw_shift,  last_index)
+
+#paste(l, l_move, from_position, to_position, sep = ' ~ ') |> 
+#  print()
+
 after_loop <<- after_loop |>
     mutate(
-      old_order = current_order,
-      move_position = sum((orig_order == (l - 1)) * current_order),
-      move_to = case_when(
-        move_position + l_move <= 0 ~ ((move_position + l_move - 1) %% last_index),
-        move_position + l_move > last_index ~ ((move_position + l_move + 1) %% last_index),
-        TRUE ~ move_position + l_move
-      ),
+      old_order = as.double(current_order),
+      move_position = from_position,
+      new_position = to_position,
       current_order = case_when(
-        current_order == move_position ~ move_to,
-        move_to <= move_position & 
-          current_order >= move_to & 
-          current_order <= move_position ~
-          (current_order + 1)  %% last_index,
-        move_to >= move_position  & 
-          current_order >= move_position & 
-          current_order <= move_to ~
-          (current_order - 1)  %% last_index,
-        TRUE ~ current_order
+        l_move == 0 ~ old_order, 
+        
+        old_order == move_position ~ new_position,
+        
+        move_position < new_position &
+          move_position <= old_order &
+          old_order <= new_position ~ 
+          mod_shift(old_order - 1, last_index),
+        
+        move_position > new_position &
+          new_position <= old_order &
+          old_order <= move_position ~ 
+          mod_shift(old_order + 1, last_index),
+        
+        TRUE ~ old_order
       )
-    )
+    ) 
 
 }
 
-after_loop <- df_20
+
+# prepare for loop --------------------------------------------------------
+
+after_loop <- df_20 |> 
+  group_by(orig_order)  
+
+
+# run loops ---------------------------------------------------------------
+
 walk(loop, make_change)
-paste(after_loop$move, collapse = ', ')
+
+#walk(loop[1], make_change)
+#after_loop |> 
+#  arrange(current_order) |> 
+#  pull(move) |> 
+#  paste( collapse = ', ')
+
+
+# get selected values -----------------------------------------------------
+
 
 values_wanted <- c(0, 1000, 2000, 3000) %% last_index
 
 resort_zero <- after_loop |> 
+  ungroup() |> 
   mutate(
     zero_position = sum((orig_order == zeroth) * current_order),
     final_position = (current_order - zero_position) %% last_index
@@ -70,7 +112,7 @@ df_20_sum <- resort_zero |>
   summarise(final = sum(move)) |> 
   pull(final)
 
-df_20_sum
+as.character(df_20_sum)
 
 # 589 is too low
 # 3082 is too low
