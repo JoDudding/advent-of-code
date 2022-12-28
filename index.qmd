@@ -1933,6 +1933,8 @@ for_looping <- for_looping |>
 
 humn <- eval(parse(text = calc_string))
 
+stars <- stars + 1
+
 ```
 
 The number monkey humn calls out is
@@ -2076,6 +2078,8 @@ for(i in num_inter:0) {
 
   track_it <- c(track_it, code)
 }
+
+stars <- stars + 1
 ```
 
 The SNAFU number is
