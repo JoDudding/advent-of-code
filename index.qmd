@@ -2013,6 +2013,73 @@ markers <- c('n' = '^', 'e' = '>', 'w' = '<', 's' = 'v')
 
 ```
 
+# Day 25 *
+
+Full of hot air
+
+```{r}
+#| label: read-day25
+
+# read in file ------------------------------------------------------------
+
+df_25 <- tibble(lines = readLines('inputs/day25.txt')) |> 
+  mutate(
+    row = row_number(),
+    code = str_split(lines, pattern = '')
+  ) |> 
+  group_by(row) |> 
+  unnest(code) |> 
+  mutate(power5 = n() - row_number()) |> 
+  select(-lines) |> 
+  ungroup() 
+
+
+# mapping of code to decimal ----------------------------------------------
+
+code5 <- tibble(
+  code = c('=', '-', '0', '1', '2'),
+  normal = c(-2, -1,0, 1, 2)
+)
+
+
+# convert to decimal number -----------------------------------------------
+
+converted <- df_25 |> 
+  inner_join(code5, by = 'code') |> 
+  mutate(
+    powered = 5 ^ power5,
+    converted = powered * normal
+  ) |> 
+  group_by(row) |> 
+  summarise(converted = sum(converted)) |> 
+  ungroup() |> 
+  summarise(converted = sum(converted)) |> 
+  pull(converted)
+
+
+# find the number of powers of 5 ------------------------------------------
+
+num_inter <- floor(log(converted, 5))
+val <- converted
+track_it <- c()
+
+for(i in num_inter:0) {
+  
+  start <- val
+  power <- 5^i
+  val_plus <- val + (power/2)
+  step <- val_plus %/% power
+  val <- val - (step * power)
+  code <- code5 |> 
+    filter(normal == step) |> 
+    pull(code)
+
+  track_it <- c(track_it, code)
+}
+```
+
+The SNAFU number is
+[`r paste(track_it, collapse = '')`]{.aoc-green}. [*]{.aoc-yellow}
 
 # Total stars
 
